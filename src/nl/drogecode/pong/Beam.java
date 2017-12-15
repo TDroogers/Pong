@@ -1,4 +1,4 @@
-package pong;
+package nl.drogecode.pong;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;

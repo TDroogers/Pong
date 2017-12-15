@@ -1,4 +1,4 @@
-package pong;
+package nl.drogecode.pong;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;

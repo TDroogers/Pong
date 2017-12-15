@@ -1,4 +1,4 @@
-package pong;
+package nl.drogecode.pong;
 
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;

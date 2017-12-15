@@ -1,4 +1,4 @@
-package pong;
+package nl.drogecode.pong;
 
 public class Pause
 {
