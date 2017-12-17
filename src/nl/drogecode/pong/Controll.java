@@ -34,13 +34,19 @@ public class Controll
     switch (keyCode)
     {
       case UP:
+        right.stopY(-1);
+        break;
+        
       case DOWN:
-        right.stopY();
+        right.stopY(1);
         break;
 
       case W:
+        left.stopY(-1);
+        break;
+        
       case S:
-        left.stopY();
+        left.stopY(1);
         break;
 
       default:
@@ -53,19 +59,19 @@ public class Controll
     switch (keyDown)
     {
       case UP:
-        right.startY(-5);
+        right.startY(-1);
         break;
 
       case DOWN:
-        right.startY(5);
+        right.startY(1);
         break;
 
       case W:
-        left.startY(-5);
+        left.startY(-1);
         break;
 
       case S:
-        left.startY(5);
+        left.startY(1);
         break;
 
       case SPACE:

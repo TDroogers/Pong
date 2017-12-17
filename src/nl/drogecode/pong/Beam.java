@@ -11,13 +11,14 @@ public class Beam extends Rectangle
   private int hight;
   private int widthBeam;
   private int fromBoarder;
+  
+  private double change;
+  private double beamSpeed;
 
   private String position;
   private Stage stage;
   private Thread th;
   private Pause pause;
-  private double change;
-  private boolean down = false;
 
   public Beam(Settings settings, String position, Stage stage, Pause pause)
   {
@@ -28,6 +29,7 @@ public class Beam extends Rectangle
     distanceFromBorder = settings.getDistanceFromBorder();
     hight = settings.getHight();
     widthBeam = settings.getWidthBeam();
+    beamSpeed = settings.getBeamSpeed();
 
     restart();
   }
@@ -50,20 +52,22 @@ public class Beam extends Rectangle
     }
   }
 
-  public void startY(double change)
+  public void startY(int change)
   {
-    if (!down)
+    this.change = change*beamSpeed;
+    if (th == null || !th.isAlive())
     {
-      this.change = change;
       initiateChangeY();
-      down = true;
     }
   }
 
-  public void stopY()
+  public void stopY(int change)
   {
-    th.interrupt();
-    down = false;
+    if (this.change == change*beamSpeed)
+    {
+      this.change = 0;
+      th.interrupt();
+    }
   }
 
   public int getDistanceFromBorder()

@@ -31,7 +31,7 @@ public class Pong extends Application
     // Create Circle
     Bal bal = new Bal(settings, primaryStage, rLeft, rRight, score, pause);
 
-    root.getChildren().addAll(score, message, bal, rLeft, rRight);
+    root.getChildren().addAll(score, bal, message, rLeft, rRight);
 
     primaryStage.setResizable(false);
 
@@ -51,10 +51,5 @@ public class Pong extends Application
       // System.out.println("e = " + e);
       contr.setRelease(e.getCode());
     });
-  }
-
-  protected void finalize()
-  {
-    System.out.println("finalize");
   }
 }

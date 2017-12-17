@@ -10,6 +10,7 @@ public class Settings
   private int distanceFromBorder = 30;
   private int hight = 50;
   private int widthBeam = 5;
+  private double beamSpeed = 5;
 
   // bal
   private double startSpeed = 5;
@@ -52,6 +53,11 @@ public class Settings
   public int getWidthBeam()
   {
     return widthBeam;
+  }
+
+  public double getBeamSpeed()
+  {
+    return beamSpeed;
   }
 
   // bal

@@ -12,24 +12,13 @@ public class Pause
 
   public void setPause()
   {
-    if (pause)
-    {
-      pause = false;
-    }
-    else
-    {
-      pause = true;
-    }
+    pause = !pause;
 
     message.messageSwitch(pause);
   }
 
   public boolean getPause()
   {
-    if (pause == true)
-    {
-      return true;
-    }
-    return false;
+    return pause;
   }
 }
