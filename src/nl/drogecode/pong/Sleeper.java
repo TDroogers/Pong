@@ -15,10 +15,6 @@ public class Sleeper
     }
     catch (InterruptedException ex)
     {
-      /*
-       * TODO: find a way to prevent using this catch block as part of running code.
-       * 
-       */
       System.out.println("Time thread error: " + ex);
       Thread.currentThread().interrupt();
       return false;
