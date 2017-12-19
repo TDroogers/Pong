@@ -23,11 +23,12 @@ import java.util.Iterator;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class JsonReader
+public class WebJsonReader
 {
-  private static String url = "http://localhost/herbouw/?load=api&api=java_pong&type=json";
+  
+  private static String url = Settings.getUrl() + "?load=api&api=java_pong&type=json";
 
-  public JsonReader()
+  public WebJsonReader()
   {
     try
     {
