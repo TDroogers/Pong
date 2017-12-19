@@ -14,6 +14,8 @@ public class Beam extends Rectangle
   
   private double change;
   private double beamSpeed;
+  
+  private boolean breaker = false;
 
   private String position;
   private Stage stage;
@@ -66,7 +68,8 @@ public class Beam extends Rectangle
     if (this.change == change*beamSpeed)
     {
       this.change = 0;
-      th.interrupt();
+      breaker = true;
+      //th.interrupt();
     }
   }
 
@@ -105,18 +108,20 @@ public class Beam extends Rectangle
 
   private void changeY()
   {
+    double max = stage.getScene().getHeight() - hight;
+    Sleeper sleep = new Sleeper();
     while (true)
     {
-      if (pauzCheck())
+      if (pauzCheck(sleep))
       {
         continue;
       }
       double y = getY();
       double neww = y + change;
-      double max = stage.getScene().getHeight() - hight;
-      if (neww > max || neww < 0 || Thread.currentThread().isInterrupted())
+      if (neww > max || neww < 0)
       {
-        break;
+        sleep.sleeper();
+        continue;
       }
       Platform.runLater(new Runnable()
       {
@@ -125,19 +130,18 @@ public class Beam extends Rectangle
           setY(neww);
         }
       });
-      Sleeper sleep = new Sleeper();
-      if (!sleep.sleeper())
+      if (!sleep.sleeper() || breaker || Thread.currentThread().isInterrupted())
       {
+        breaker = false;
         break;
       }
     }
   }
 
-  private boolean pauzCheck()
+  private boolean pauzCheck(Sleeper sleep)
   {
     if (pause.getPause())
     {
-      Sleeper sleep = new Sleeper();
       sleep.sleeper(100);
       return true;
     }

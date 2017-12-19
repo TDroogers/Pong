@@ -19,7 +19,7 @@ public class Sleeper
        * TODO: find a way to prevent using this catch block as part of running code.
        * 
        */
-      // System.out.println("Time thread error: " + ex);
+      System.out.println("Time thread error: " + ex);
       Thread.currentThread().interrupt();
       return false;
     }

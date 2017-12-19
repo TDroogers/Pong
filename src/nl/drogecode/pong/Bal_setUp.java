@@ -13,6 +13,7 @@ public class Bal_setUp extends Circle
   protected Beam right;
   protected Score score;
   protected Pause pause;
+  protected Sleeper sleep;
   protected double speedUp;
   protected double newX;
   protected double newY;
@@ -32,6 +33,9 @@ public class Bal_setUp extends Circle
     this.right = right;
     this.score = score;
     this.pause = pause;
+    
+
+    this.sleep = new Sleeper();
 
     startX = stage.getScene().getWidth() / 2;
     startY = stage.getScene().getHeight() / 2;
@@ -55,7 +59,6 @@ public class Bal_setUp extends Circle
   {
     if (pause.getPause())
     {
-      Sleeper sleep = new Sleeper();
       sleep.sleeper(100);
       return true;
     }
@@ -87,7 +90,6 @@ public class Bal_setUp extends Circle
 
   protected void nextRound()
   {
-    Sleeper sleep = new Sleeper();
     sleep.sleeper(1500);
     nextRoundStart();
   }

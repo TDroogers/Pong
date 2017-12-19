@@ -14,6 +14,7 @@ public class Bal extends Bal_setUp
   private double y;
   private boolean firstSpeedUp = true;
   private boolean restart = false;
+  private boolean breaker = false;
 
   public Bal(Settings settings, Stage stage, Beam left, Beam right, Score score, Pause pause)
   {
@@ -26,7 +27,8 @@ public class Bal extends Bal_setUp
     centerBall();
     if (th != null)
     {
-      th.interrupt();
+      breaker = true;
+      //th.interrupt();
     }
     startMove();
   }
@@ -50,6 +52,8 @@ public class Bal extends Bal_setUp
   {
     maxX = stage.getScene().getWidth();
     maxY = stage.getScene().getHeight();
+    x = getCenterX();
+    y = getCenterY();
     if (!setDirection(0))
     {
       return;
@@ -69,9 +73,6 @@ public class Bal extends Bal_setUp
 
   private boolean change()
   {
-    x = getCenterX();
-    y = getCenterY();
-
     if (restart)
     {
       rOrL = 0;
@@ -86,11 +87,14 @@ public class Bal extends Bal_setUp
 
     updateBal();
 
-    Sleeper sleep = new Sleeper();
-    if (!sleep.sleeper((int) speedUp))
+    if (!sleep.sleeper((int) speedUp) || breaker)
     {
+      breaker = false;
       return false;
     }
+
+    x = newX;
+    y = newY;
 
     return true;
   }
@@ -223,8 +227,6 @@ public class Bal extends Bal_setUp
     }
 
     setDirection(calc);
-
-    // System.out.println(calc + " " + speedUp + " " + speed);
 
     speedUp();
     clear = 3;
