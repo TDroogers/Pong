@@ -111,7 +111,6 @@ public class WebSender
     String webResult , Result = null;
     while ((webResult = rd.readLine()) != null)
     {
-      //System.out.println(webResult);
       Result = webResult;
     }
     wr.close();
