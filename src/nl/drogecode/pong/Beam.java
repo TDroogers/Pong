@@ -38,7 +38,7 @@ public class Beam extends Rectangle
 
   public void restart()
   {
-    setY(135 - (hight / 2));
+    setY(stage.getScene().getHeight()/2 - (hight / 2));
     setWidth(widthBeam);
     setHeight(hight);
     switch (position)

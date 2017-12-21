@@ -3,6 +3,9 @@ package nl.drogecode.pong;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 
 public class Pong extends Application
@@ -18,7 +21,9 @@ public class Pong extends Application
     Settings settings = new Settings();
 
     Group root = new Group();
-    primaryStage.setScene(new Scene(root, settings.getGameWidth(), settings.getGameHight()));
+    Scene scene = setScene(settings, root);
+
+    primaryStage.setScene(scene);
 
     Score score = new Score(primaryStage, settings);
     Message message = new Message(primaryStage);
@@ -42,14 +47,31 @@ public class Pong extends Application
 
     primaryStage.getScene().setOnKeyPressed(e ->
     {
-      // System.out.println("e = " + e);
       contr.setKey(e.getCode());
     });
 
     primaryStage.getScene().setOnKeyReleased(e ->
     {
-      // System.out.println("e = " + e);
       contr.setRelease(e.getCode());
     });
+  }
+
+  private Scene setScene(Settings settings, Group root)
+  {
+    
+    Scene scene = new Scene(root, settings.getGameWidth(), settings.getGameHight());
+    
+    MenuBar menuBar = new MenuBar();
+    Menu menuFile = new Menu("Online");
+    MenuItem add = new MenuItem("Search connection");
+    
+    WebSender webSender = new WebSender();
+    add.setOnAction(e->webSender.connect());
+    
+    menuFile.getItems().addAll(add);
+    menuBar.getMenus().addAll(menuFile);
+
+    ((Group) scene.getRoot()).getChildren().addAll(menuBar);
+    return scene;
   }
 }

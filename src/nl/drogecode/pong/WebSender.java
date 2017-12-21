@@ -1,35 +1,121 @@
+/*
+ * 
+ * test url for browser: http://localhost/herbouw/?load=api&api=java_pong&type=json&step=hello&name=111100000
+ * 
+ */
+
 package nl.drogecode.pong;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
 public class WebSender
 {
-  public static void main(String[] argv) throws Exception
+  private String randomName;
+  private String data;
+  private String id = "";
+  private boolean hello = false;
+  
+  public WebSender()
   {
-    String data = URLEncoder.encode("load", "UTF-8") + "=" + URLEncoder.encode("api", "UTF-8");
-    data += "&" + URLEncoder.encode("api", "UTF-8") + "=" + URLEncoder.encode("api_tester", "UTF-8");
+    randomName = ((Integer)(int)(Math.random()*2147483647+1)).toString();
+    try
+    {
+      data = URLEncoder.encode("load", "UTF-8") + "=" + URLEncoder.encode("api", "UTF-8");
+      data += "&" + URLEncoder.encode("api", "UTF-8") + "=" + URLEncoder.encode("java_pong", "UTF-8");
+      data += "&" + URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8");
+      data += "&" + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(randomName, "UTF-8");
+    }
+    catch (UnsupportedEncodingException e)
+    {
+      e.printStackTrace();
+    }
+  }
+  
+  protected void connect()
+  {
+    String dataExtend = "";
+    if (!hello)
+    {
+      dataExtend = firstContact();
+      hello = true;
+    }
+    else
+    {
+      dataExtend = stillOnline();
+    }
+    String webResult;
+    try
+    {
+      webResult = sender(dataExtend);
+      JsonReader reader = new JsonReader(webResult);
+      reader.getPartAsString();
+      id = reader.getId();
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+  }
+  
+  private String firstContact()
+  {
+    String dataExtend = "";
+    try
+    {
+      dataExtend += "&" + URLEncoder.encode("step", "UTF-8") + "=" + URLEncoder.encode("hello", "UTF-8");
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+    return dataExtend;
+  }
+  
+  private String stillOnline()
+  {
+    String dataExtend = "";
+    try
+    {
+      dataExtend += "&" + URLEncoder.encode("step", "UTF-8") + "=" + URLEncoder.encode("ImBack", "UTF-8");
+      dataExtend += "&" + URLEncoder.encode("id", "UTF-8") + "=" + URLEncoder.encode(id, "UTF-8");
+    }
+    catch (Exception e)
+    {
+      e.printStackTrace();
+    }
+    return dataExtend;
+  }
+
+  private String sender(String dataExtend) throws IOException
+  {
 
     String url = Settings.getUrl();
+    
+    String dataSend = data + dataExtend;
 
     URL urll = new URL(url);
     URLConnection conn = urll.openConnection();
     conn.setDoOutput(true);
     OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-    wr.write(data);
+    wr.write(dataSend);
     wr.flush();
 
     BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-    String line;
-    while ((line = rd.readLine()) != null)
+    String webResult , Result = null;
+    while ((webResult = rd.readLine()) != null)
     {
-      System.out.println(line);
+      //System.out.println(webResult);
+      Result = webResult;
     }
     wr.close();
     rd.close();
+    return Result;
   }
 }
