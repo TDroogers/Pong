@@ -16,13 +16,13 @@ import java.util.Iterator;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class JsonReader
+public class WebJsonReader
 {
 
   private JSONObject json;
   private String id = "";
 
-  public JsonReader(String webResult)
+  public WebJsonReader(String webResult)
   {
     try
     {

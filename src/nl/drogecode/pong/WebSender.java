@@ -10,34 +10,35 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
 public class WebSender
 {
-  private String randomName;
+  private String randomName, randomPoort;
   private String data;
   private String id = "";
   private boolean hello = false;
-  
+
   public WebSender()
   {
-    randomName = ((Integer)(int)(Math.random()*2147483647+1)).toString();
+    randomName = ((Integer) (int) (Math.random() * 2147483647 + 1)).toString();
+    randomPoort = ((Integer) (int) (Math.random() * 50 + 2200)).toString();
     try
     {
       data = URLEncoder.encode("load", "UTF-8") + "=" + URLEncoder.encode("api", "UTF-8");
       data += "&" + URLEncoder.encode("api", "UTF-8") + "=" + URLEncoder.encode("java_pong", "UTF-8");
       data += "&" + URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8");
       data += "&" + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(randomName, "UTF-8");
+      data += "&" + URLEncoder.encode("poort", "UTF-8") + "=" + URLEncoder.encode(randomPoort, "UTF-8");
     }
-    catch (UnsupportedEncodingException e)
+    catch (IOException e)
     {
       e.printStackTrace();
     }
   }
-  
+
   protected void connect()
   {
     String dataExtend = "";
@@ -54,7 +55,7 @@ public class WebSender
     try
     {
       webResult = sender(dataExtend);
-      JsonReader reader = new JsonReader(webResult);
+      WebJsonReader reader = new WebJsonReader(webResult);
       reader.getPartAsString();
       id = reader.getId();
     }
@@ -63,7 +64,7 @@ public class WebSender
       e.printStackTrace();
     }
   }
-  
+
   private String firstContact()
   {
     String dataExtend = "";
@@ -77,7 +78,7 @@ public class WebSender
     }
     return dataExtend;
   }
-  
+
   private String stillOnline()
   {
     String dataExtend = "";
@@ -97,7 +98,7 @@ public class WebSender
   {
 
     String url = Settings.getUrl();
-    
+
     String dataSend = data + dataExtend;
 
     URL urll = new URL(url);
@@ -108,7 +109,7 @@ public class WebSender
     wr.flush();
 
     BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-    String webResult , Result = null;
+    String webResult, Result = null;
     while ((webResult = rd.readLine()) != null)
     {
       Result = webResult;

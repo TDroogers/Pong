@@ -28,7 +28,6 @@ public class Bal extends Bal_setUp
     if (th != null)
     {
       breaker = true;
-      //th.interrupt();
     }
     startMove();
   }

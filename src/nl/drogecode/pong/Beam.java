@@ -11,10 +11,10 @@ public class Beam extends Rectangle
   private int hight;
   private int widthBeam;
   private int fromBoarder;
-  
+
   private double change;
   private double beamSpeed;
-  
+
   private boolean breaker = false;
 
   private String position;
@@ -38,7 +38,7 @@ public class Beam extends Rectangle
 
   public void restart()
   {
-    setY(stage.getScene().getHeight()/2 - (hight / 2));
+    setY(stage.getScene().getHeight() / 2 - (hight / 2));
     setWidth(widthBeam);
     setHeight(hight);
     switch (position)
@@ -56,7 +56,7 @@ public class Beam extends Rectangle
 
   public void startY(int change)
   {
-    this.change = change*beamSpeed;
+    this.change = change * beamSpeed;
     if (th == null || !th.isAlive())
     {
       initiateChangeY();
@@ -65,11 +65,10 @@ public class Beam extends Rectangle
 
   public void stopY(int change)
   {
-    if (this.change == change*beamSpeed)
+    if (this.change == change * beamSpeed)
     {
       this.change = 0;
       breaker = true;
-      //th.interrupt();
     }
   }
 
@@ -123,19 +122,34 @@ public class Beam extends Rectangle
         sleep.sleeper();
         continue;
       }
-      Platform.runLater(new Runnable()
-      {
-        @Override public void run()
-        {
-          setY(neww);
-        }
-      });
+      runLater((short) 0, neww);
       if (!sleep.sleeper() || breaker || Thread.currentThread().isInterrupted())
       {
-        breaker = false;
+        runLater((short) 1, neww);
         break;
       }
     }
+  }
+
+  private void runLater(short s, double neww)
+  {
+    Platform.runLater(new Runnable()
+    {
+      @Override public void run()
+      {
+        switch (s)
+        {
+          case 0:
+            setY(neww);
+            break;
+
+          case 1:
+            breaker = false;
+            break;
+        }
+
+      }
+    });
   }
 
   private boolean pauzCheck(Sleeper sleep)
