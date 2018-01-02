@@ -1,9 +1,6 @@
 package nl.drogecode.pong;
 
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
+import java.net.*;
 
 public class WebServerUdp extends Thread {
   
@@ -20,25 +17,17 @@ public class WebServerUdp extends Thread {
 
       while (running) {
         try {
-          DatagramPacket packet 
-            = new DatagramPacket(buf, buf.length);
-          socket.receive(packet);
-          InetAddress address = packet.getAddress();
-          int port = packet.getPort();
-          packet = new DatagramPacket(buf, buf.length, address, port);
-          String received 
-            = new String(packet.getData(), 0, packet.getLength());
-          //System.out.println(received);
-          if (received.equals("end")) {
-              running = false;
-              continue;
-          }
-          String msg = "terug weg";
-          System.out.println(msg);
+          InetAddress address = InetAddress.getByName("230.0.0.1");
+          int port = 4446;
+          InetAddress me = InetAddress.getLocalHost();
+          String msg = me.getHostAddress();
+         
           buf = msg.getBytes();
-          packet = new DatagramPacket(buf, buf.length, address, port);
+          DatagramPacket packet = new DatagramPacket(buf, buf.length, address, port);
           
           socket.send(packet);
+          Sleeper sleep = new Sleeper();
+          sleep.sleeper(100);
         }
         catch(Exception e)
         {

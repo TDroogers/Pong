@@ -12,9 +12,10 @@ public class WebClient
   {
 
     WebClientUdp udp = new WebClientUdp();
-    udp.sendEcho("test");
-    
-    String hostName = "localhost";
+    String hostName = udp.getBroadcast();
+
+    System.out.println(hostName);
+
     int portNumber = 2315;
 
     try (Socket kkSocket = new Socket(hostName, portNumber);

@@ -5,26 +5,30 @@ import java.net.*;
 
 public class WebClientUdp
 {
-  private DatagramSocket socket;
-  private InetAddress address;
+  private MulticastSocket socket;
+  private InetAddress group;
 
   private byte[] buf;
 
-  public WebClientUdp() throws SocketException, UnknownHostException
+  public WebClientUdp() throws IOException
   {
-    socket = new DatagramSocket();
-    address = InetAddress.getByName("192.168.1.0");
+    socket = new MulticastSocket(4446);
+    group = InetAddress.getByName("230.0.0.1");
+    socket.joinGroup(group);
   }
 
-  public String sendEcho(String msg) throws IOException
+  public String getBroadcast() throws IOException
   {
-    buf = msg.getBytes();
-    DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 4445);
-    socket.send(packet);
+    DatagramPacket packet;
+
+    buf = new byte[256];
     packet = new DatagramPacket(buf, buf.length);
     socket.receive(packet);
-    String received = new String(packet.getData(), 0, packet.getLength());
-    System.out.println(packet);
+
+    String received = new String(packet.getData());
+
+    socket.leaveGroup(group);
+    socket.close();
     return received;
   }
 
