@@ -20,7 +20,7 @@ public class Bal extends Bal_setUp
   {
     super(settings, stage, left, right, score, pause);
   }
-  
+
   public void nextGame()
   {
     restart = true;
@@ -235,7 +235,7 @@ public class Bal extends Bal_setUp
   {
     if (speedUp > 30)
     {
-      speedUp--;
+      speedUp = speedUp - 2;
     }
     else if (speed <= 60)
     {
@@ -243,7 +243,7 @@ public class Bal extends Bal_setUp
       {
         firstSpeedUp = false;
       }
-      speed += 0.3;
+      speed += 0.5;
     }
     else
     {
