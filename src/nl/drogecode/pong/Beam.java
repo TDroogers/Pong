@@ -15,7 +15,7 @@ public class Beam extends Rectangle
   private double change;
   private double beamSpeed;
 
-  private boolean breaker = false;
+  private volatile boolean breaker = false;
 
   private String position;
   private Stage stage;
@@ -76,6 +76,34 @@ public class Beam extends Rectangle
   {
     return fromBoarder;
   }
+  
+  /*
+   * External controll functions
+   */
+  
+  public double getBeamX()
+  {
+    return getX();
+  }
+  
+  public double getBeamY()
+  {
+    return getY();
+  }
+  
+  public void setBeamX(double newX)
+  {
+    setX(newX);
+  }
+  
+  public void setBeamY(double newY)
+  {
+    setY(newY);
+  }
+  
+  /*
+   * private function's
+   */
 
   private void setRight()
   {
@@ -117,7 +145,7 @@ public class Beam extends Rectangle
       }
       double y = getY();
       double neww = y + change;
-      if (neww > max || neww < 0)
+      if (neww > max || neww < 25)
       {
         sleep.sleeper();
         continue;

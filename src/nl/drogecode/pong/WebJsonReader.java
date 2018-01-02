@@ -1,17 +1,14 @@
 /*
  * 
- * Thanks:
- * 
- * https://stackoverflow.com/questions/4308554/simplest-way-to-read-json-from-a-url-in-java
- * 
- * tested with: {"id":"93","dbResult":{"0":{"ID":"93","Name":"1642681752","DateTime":"2017-12-21 13:18:20","ip":"127.0.0.1"},"1":{"ID":"94","Name":"111100000","DateTime":"2017-12-21 13:18:17","ip":"::1"},"2":{"ID":"95","Name":"111100000","DateTime":"2017-12-21 13:18:17","ip":"::1"},"3":{"ID":"96","Name":"111100000","DateTime":"2017-12-21 13:18:17","ip":"::1"},"4":{"ID":"97","Name":"111100000","DateTime":"2017-12-21 13:18:18","ip":"::1"}}}
- * as result from localhost.
+ * Thanks: https://stackoverflow.com/questions/4308554/simplest-way-to-read-json-from-a-url-in-java
  * 
  */
 
 package nl.drogecode.pong;
 
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +18,7 @@ public class WebJsonReader
 
   private JSONObject json;
   private String id = "";
+  Map<String,String> mss;
 
   public WebJsonReader(String webResult)
   {
@@ -34,13 +32,14 @@ public class WebJsonReader
     }
   }
 
-  public void getPartAsString() throws JSONException
+  public Map<String,String> getPartAsMap() throws JSONException
   {
-    id = (String) json.get("id");
-    System.out.println((id));
+    mss = new HashMap<String,String>();
     Iterator<?> keys = json.keys();
 
     loopInsideLoop(keys, json);
+    
+    return mss;
   }
 
   public String getId()
@@ -55,11 +54,16 @@ public class WebJsonReader
       String part = (String) keys.next();
       if ((json.get(part) instanceof JSONObject))
       {
-        System.out.println(json.get(part));
+        System.out.println("if " + json.get(part));
         JSONObject nextLoop = (JSONObject) json.get(part);
         Iterator<?> key = nextLoop.keys();
 
         loopInsideLoop(key, nextLoop);
+      }
+      else
+      {
+        mss.put(part, (String) json.get(part));
+        System.out.println("else " + json.get(part) + " " + part);
       }
     }
   }

@@ -6,116 +6,62 @@
 
 package nl.drogecode.pong;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
+
+import javafx.concurrent.Task;
+import javafx.stage.Stage;
 
 public class WebSender
 {
-  private String randomName, randomPoort;
-  private String data;
-  private String id = "";
-  private boolean hello = false;
 
+  private WebClient client;
+  private WebServer server;
+  private Stage stage;
+  private MovableObjects movable;
+  
   public WebSender()
   {
-    randomName = ((Integer) (int) (Math.random() * 2147483647 + 1)).toString();
-    randomPoort = ((Integer) (int) (Math.random() * 50 + 2200)).toString();
+    client = new WebClient();
+    server = new WebServer();
+  }
+  
+  public void connect()
+  {
+    Task<Void> task = new Task<Void>()
+    {
+      @Override protected Void call() throws Exception
+      {
+        insideThread();
+        return null;
+      }
+    };
+    Thread th = new Thread(task);
+    th.setDaemon(true);
+    th.start();
+  }
+  
+  public void setControll(MovableObjects movable)
+  {
+    this.movable = movable;
+  }
+  
+  public void setPrimaryStage(Stage primaryStage)
+  {
+    this.stage = primaryStage;
+  }
+  
+  private void insideThread()
+  {
     try
     {
-      data = URLEncoder.encode("load", "UTF-8") + "=" + URLEncoder.encode("api", "UTF-8");
-      data += "&" + URLEncoder.encode("api", "UTF-8") + "=" + URLEncoder.encode("java_pong", "UTF-8");
-      data += "&" + URLEncoder.encode("type", "UTF-8") + "=" + URLEncoder.encode("json", "UTF-8");
-      data += "&" + URLEncoder.encode("name", "UTF-8") + "=" + URLEncoder.encode(randomName, "UTF-8");
-      data += "&" + URLEncoder.encode("poort", "UTF-8") + "=" + URLEncoder.encode(randomPoort, "UTF-8");
+      if (!client.client(movable))
+      {
+        server.server(movable);
+      }
     }
     catch (IOException e)
     {
       e.printStackTrace();
     }
-  }
-
-  protected void connect()
-  {
-    String dataExtend = "";
-    if (!hello)
-    {
-      dataExtend = firstContact();
-      hello = true;
-    }
-    else
-    {
-      dataExtend = stillOnline();
-    }
-    String webResult;
-    try
-    {
-      webResult = sender(dataExtend);
-      WebJsonReader reader = new WebJsonReader(webResult);
-      reader.getPartAsString();
-      id = reader.getId();
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-  }
-
-  private String firstContact()
-  {
-    String dataExtend = "";
-    try
-    {
-      dataExtend += "&" + URLEncoder.encode("step", "UTF-8") + "=" + URLEncoder.encode("hello", "UTF-8");
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-    return dataExtend;
-  }
-
-  private String stillOnline()
-  {
-    String dataExtend = "";
-    try
-    {
-      dataExtend += "&" + URLEncoder.encode("step", "UTF-8") + "=" + URLEncoder.encode("ImBack", "UTF-8");
-      dataExtend += "&" + URLEncoder.encode("id", "UTF-8") + "=" + URLEncoder.encode(id, "UTF-8");
-    }
-    catch (Exception e)
-    {
-      e.printStackTrace();
-    }
-    return dataExtend;
-  }
-
-  private String sender(String dataExtend) throws IOException
-  {
-
-    String url = Settings.getUrl();
-
-    String dataSend = data + dataExtend;
-
-    URL urll = new URL(url);
-    URLConnection conn = urll.openConnection();
-    conn.setDoOutput(true);
-    OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
-    wr.write(dataSend);
-    wr.flush();
-
-    BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-    String webResult, Result = null;
-    while ((webResult = rd.readLine()) != null)
-    {
-      Result = webResult;
-    }
-    wr.close();
-    rd.close();
-    return Result;
   }
 }

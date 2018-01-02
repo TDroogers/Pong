@@ -12,6 +12,7 @@ public class Controll
   Score score;
   Message message;
   Pause pause;
+  String side = "co op";
 
   public Controll(Beam left, Beam right, Bal bal, Score score, Message message, Pause pause)
   {
@@ -23,20 +24,57 @@ public class Controll
     this.pause = pause;
   }
 
+  public void setPlayer(String side)
+  {
+    this.side = side;
+  }
+
   public void setKey(KeyCode keyCode)
   {
     this.keyDown = keyCode;
-    BeamChange();
+    switch (side)
+    {
+      case "co op":
+        beamStart();
+        break;
+
+      case "client":
+        beamStartClient();
+        break;
+
+      case "server":
+        beamStartServer();
+        break;
+    }
   }
 
   public void setRelease(KeyCode keyCode)
   {
-    switch (keyCode)
+    this.keyUp = keyCode;
+    switch (side)
+    {
+      case "co op":
+        beamStop();
+        break;
+
+      case "client":
+        beamStopClient();
+        break;
+
+      case "server":
+        beamStopServer();
+        break;
+    }
+  }
+
+  private void beamStop()
+  {
+    switch (keyUp)
     {
       case UP:
         right.stopY(-1);
         break;
-        
+
       case DOWN:
         right.stopY(1);
         break;
@@ -44,7 +82,7 @@ public class Controll
       case W:
         left.stopY(-1);
         break;
-        
+
       case S:
         left.stopY(1);
         break;
@@ -54,7 +92,42 @@ public class Controll
     }
   }
 
-  private void BeamChange()
+  private void beamStopClient()
+  {
+    switch (keyUp)
+    {
+      case UP:
+        right.stopY(-1);
+        break;
+
+      case DOWN:
+        right.stopY(1);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  private void beamStopServer()
+  {
+
+    switch (keyUp)
+    {
+      case UP:
+        left.stopY(-1);
+        break;
+
+      case DOWN:
+        left.stopY(1);
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  private void beamStart()
   {
     switch (keyDown)
     {
@@ -75,11 +148,7 @@ public class Controll
         break;
 
       case SPACE:
-        score.restart();
-        bal.nextGame();
-        left.restart();
-        right.restart();
-        System.gc();
+        restart();
         break;
 
       case ESCAPE:
@@ -90,5 +159,54 @@ public class Controll
       default:
         break;
     }
+  }
+
+  private void beamStartClient()
+  {
+    switch (keyDown)
+    {
+      case UP:
+        right.startY(-1);
+        break;
+
+      case DOWN:
+        right.startY(1);
+        break;
+
+      // client can not restart the game.
+
+      default:
+        break;
+    }
+  }
+
+  private void beamStartServer()
+  {
+    switch (keyDown)
+    {
+      case UP:
+        left.startY(-1);
+        break;
+
+      case DOWN:
+        left.startY(1);
+        break;
+
+      case SPACE:
+        restart();
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  private void restart()
+  {
+    score.restart();
+    bal.nextGame();
+    left.restart();
+    right.restart();
+    System.gc();
   }
 }

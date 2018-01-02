@@ -1,16 +1,23 @@
 package nl.drogecode.pong;
 
 import java.net.*;
+import java.util.Map;
+
+import org.json.JSONException;
+
 import java.io.*;
 
 public class WebServerThread extends Thread
 {
   private Socket socket = null;
+  MovableObjects movable;
+  Map<String,String> mss;
 
-  public WebServerThread(Socket socket)
+  public WebServerThread(Socket socket, MovableObjects movable)
   {
     super("KKMultiServerThread " + socket.getLocalPort());
     this.socket = socket;
+    this.movable = movable;
   }
 
   @Override public void run()
@@ -25,6 +32,8 @@ public class WebServerThread extends Thread
 
       while ((inputLine = in.readLine()) != null)
       {
+        System.out.println(inputLine);
+        readJson(inputLine);
         outputLine = kkp.processInput(inputLine);
         out.println(outputLine);
         if (outputLine.equals("Bye"))
@@ -45,6 +54,23 @@ public class WebServerThread extends Thread
       {
         e.printStackTrace();
       }
+    }
+  }
+  
+  private void readJson(String inputLine)
+  {
+    try
+    {
+      WebJsonReader reader = new WebJsonReader(inputLine);
+      mss = reader.getPartAsMap();
+
+      movable.setBeamRightX(Double.parseDouble(mss.get("beamRightX")));
+      movable.setBeamRightY(Double.parseDouble(mss.get("beamRightY")));
+      System.out.println(mss.get("beamRightX"));
+    }
+    catch (JSONException e)
+    {
+      e.printStackTrace();
     }
   }
 }

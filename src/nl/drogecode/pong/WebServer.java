@@ -12,10 +12,13 @@ import java.io.*;
 public class WebServer
 {
   private static int PORTNUMBER = 2315;
+  MovableObjects movable;
 
-  public static void main(String[] args) throws IOException
+  public void server(MovableObjects movable) throws IOException
   {
-    new WebServerUdp().start();
+    WebServerUdp serUdp = new WebServerUdp();
+    this.movable = movable;
+    serUdp.start();
     
     boolean listening = true;
     System.out.println(InetAddress.getLocalHost());
@@ -23,7 +26,10 @@ public class WebServer
     {
       while (listening)
       {
-        new WebServerThread(serverSocket.accept()).start();
+        new WebServerThread(serverSocket.accept(), movable).start();
+        serUdp.stopUdp();
+        listening = false;
+        movable.setPlayer("server");
       }
     }
     catch (IOException e)

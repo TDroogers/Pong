@@ -5,7 +5,7 @@ import java.net.*;
 public class WebServerUdp extends Thread {
   
   private DatagramSocket socket;
-  private boolean running;
+  private volatile boolean running;
   private byte[] buf = new byte[256];
 
   public WebServerUdp() throws SocketException {
@@ -35,5 +35,10 @@ public class WebServerUdp extends Thread {
         }
       }
       socket.close();
+  }
+  
+  public void stopUdp()
+  {
+    running = false;
   }
 }

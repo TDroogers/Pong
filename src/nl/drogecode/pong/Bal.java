@@ -7,14 +7,15 @@ import javafx.stage.Stage;
 public class Bal extends Bal_setUp
 {
 
-  private int clear = 0;
-  private double maxX;
-  private double maxY;
-  private double x;
-  private double y;
-  private boolean firstSpeedUp = true;
-  private boolean restart = false;
-  private boolean breaker = false;
+  private volatile int clear = 0;
+  private volatile double maxX;
+  private volatile double maxY;
+  private volatile double x;
+  private volatile double y;
+  private volatile boolean firstSpeedUp = true;
+  private volatile boolean restart = false;
+  private volatile boolean breaker = false;
+  private volatile boolean client = false;
 
   public Bal(Settings settings, Stage stage, Beam left, Beam right, Score score, Pause pause)
   {
@@ -31,20 +32,28 @@ public class Bal extends Bal_setUp
     }
     startMove();
   }
+  
+  public void setClient()
+  {
+    client = true;
+  }
 
   private void startMove()
   {
-    Task<Void> task = new Task<Void>()
+    if (!client)
     {
-      @Override protected Void call() throws Exception
+      Task<Void> task = new Task<Void>()
       {
-        initiateLoop();
-        return null;
-      }
-    };
-    th = new Thread(task);
-    th.setDaemon(true);
-    th.start();
+        @Override protected Void call() throws Exception
+        {
+          initiateLoop();
+          return null;
+        }
+      };
+      th = new Thread(task);
+      th.setDaemon(true);
+      th.start();
+    }
   }
 
   private void initiateLoop()
@@ -86,7 +95,7 @@ public class Bal extends Bal_setUp
 
     updateBal();
 
-    if (!sleep.sleeper((int) speedUp) || breaker)
+    if (!sleep.sleeper((int) speedUp) || breaker || client)
     {
       breaker = false;
       return false;
@@ -105,7 +114,7 @@ public class Bal extends Bal_setUp
 
     intersect();
 
-    if (newY + getRadius() > maxY || newY - getRadius() < 0)
+    if (newY + getRadius() > maxY || newY - getRadius() < 25)
     {
       dirY *= -1;
       newY = y;
@@ -144,14 +153,17 @@ public class Bal extends Bal_setUp
 
   private void updateBal()
   {
-    Platform.runLater(new Runnable()
+    if (!client)
     {
-      @Override public void run()
+      Platform.runLater(new Runnable()
       {
-        setCenterX(newX);
-        setCenterY(newY);
-      }
-    });
+        @Override public void run()
+        {
+          setCenterX(newX);
+          setCenterY(newY);
+        }
+      });
+    }
   }
 
   private void intersect()
