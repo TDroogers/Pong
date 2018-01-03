@@ -20,7 +20,7 @@ public class WebJsonReader
   private String id = "";
   Map<String,String> mss;
 
-  public WebJsonReader(String webResult)
+  public void setString(String webResult)
   {
     try
     {
@@ -54,7 +54,9 @@ public class WebJsonReader
       String part = (String) keys.next();
       if ((json.get(part) instanceof JSONObject))
       {
-        //System.out.println("if " + json.get(part));
+        /*
+         * This part won't be reached in current version, however it is fun to keep.
+         */
         JSONObject nextLoop = (JSONObject) json.get(part);
         Iterator<?> key = nextLoop.keys();
 
@@ -63,7 +65,6 @@ public class WebJsonReader
       else
       {
         mss.put(part, (String) json.get(part));
-        //System.out.println("else " + json.get(part) + " " + part);
       }
     }
   }

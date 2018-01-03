@@ -32,28 +32,49 @@ public class Bal extends Bal_setUp
     }
     startMove();
   }
-  
-  public void setClient()
+
+  public void setClient(boolean bool)
   {
-    client = true;
+    client = bool;
   }
+
+  public double getDirX()
+  {
+    return dirX;
+  }
+
+  public double getDirY()
+  {
+    return dirY;
+  }
+
+  public void setDirX(double dir)
+  {
+    dirX = dir;
+  }
+
+  public void setDirY(double dir)
+  {
+    dirY = dir;
+  }
+  
+  /*
+   * private stuff from here.
+   */
 
   private void startMove()
   {
-    if (!client)
+    Task<Void> task = new Task<Void>()
     {
-      Task<Void> task = new Task<Void>()
+      @Override protected Void call() throws Exception
       {
-        @Override protected Void call() throws Exception
-        {
-          initiateLoop();
-          return null;
-        }
-      };
-      th = new Thread(task);
-      th.setDaemon(true);
-      th.start();
-    }
+        initiateLoop();
+        return null;
+      }
+    };
+    th = new Thread(task);
+    th.setDaemon(true);
+    th.start();
   }
 
   private void initiateLoop()
@@ -62,13 +83,13 @@ public class Bal extends Bal_setUp
     maxY = stage.getScene().getHeight();
     x = getCenterX();
     y = getCenterY();
-    if (!setDirection(0))
+    if (!setDirection(0)) // extended from Bal_setUp.java
     {
       return;
     }
     while (true)
     {
-      if (pauzCheck())
+      if (pauzCheck()) // extended from Bal_setUp.java
       {
         continue;
       }
@@ -153,17 +174,14 @@ public class Bal extends Bal_setUp
 
   private void updateBal()
   {
-    if (!client)
+    Platform.runLater(new Runnable()
     {
-      Platform.runLater(new Runnable()
+      @Override public void run()
       {
-        @Override public void run()
-        {
-          setCenterX(newX);
-          setCenterY(newY);
-        }
-      });
-    }
+        setCenterX(newX);
+        setCenterY(newY);
+      }
+    });
   }
 
   private void intersect()
@@ -256,10 +274,6 @@ public class Bal extends Bal_setUp
         firstSpeedUp = false;
       }
       speed += 0.5;
-    }
-    else
-    {
-      // System.out.println("max speed, good luck! " + speed);
     }
   }
 }

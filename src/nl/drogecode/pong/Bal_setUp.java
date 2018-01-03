@@ -48,26 +48,6 @@ public class Bal_setUp extends Circle
     setFill(Color.RED);
     setRadius(5.0);
   }
-  
-  public void setNewX(double newX)
-  {
-    setCenterX(newX);
-  }
-  
-  public void setNewY(double newY)
-  {
-    setCenterY(newY);
-  }
-  
-  public double getOldX()
-  {
-    return getCenterX();
-  }
-  
-  public double getOldY()
-  {
-    return getCenterY();
-  }
 
   protected void centerBall()
   {

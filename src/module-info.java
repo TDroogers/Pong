@@ -15,11 +15,5 @@ module nl.drogecode.pong_m
    */
   requires java.json;
 
-  /*
-   * incubator modules are work in progress, so guarantee it the finall version will work as prommised.
-   */
-   //requires jdk.incubator.httpclient;
-  // requires java.httpclient; // most likely it's future name.
-
   exports nl.drogecode.pong;
 }

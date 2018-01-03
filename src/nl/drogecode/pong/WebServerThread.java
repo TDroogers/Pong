@@ -1,19 +1,25 @@
 package nl.drogecode.pong;
 
 import java.net.*;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javafx.application.Platform;
+
 import java.io.*;
 
 public class WebServerThread extends Thread
 {
   private Socket socket = null;
-  MovableObjects movable;
-  Map<String,String> mss;
+  private MovableObjects movable;
+  private Map<String, String> mss;
+  private WebJsonReader reader = new WebJsonReader();
+  private long cal = Calendar.getInstance().getTimeInMillis();
+  private long calMax = 0;
 
   public WebServerThread(Socket socket, MovableObjects movable)
   {
@@ -33,17 +39,26 @@ public class WebServerThread extends Thread
 
       while ((inputLine = in.readLine()) != null)
       {
-        //System.out.println(inputLine);
         readJson(inputLine);
         outputLine = toServerJsonEncode();
         out.println(outputLine);
-        if (outputLine.equals("Bye"))
-          break;
+
+        long calnieuw = Calendar.getInstance().getTimeInMillis();
+        long difference = calnieuw - cal;
+        cal = calnieuw;
+        
+        if (difference > calMax)
+        {
+          calMax = difference;
+          System.out.println(calMax);
+        }
+
       }
     }
     catch (IOException e)
     {
-      e.printStackTrace();
+      System.out.println("connection lost " + e);
+      movable.setPlayer("co up");
     }
     finally
     {
@@ -57,38 +72,43 @@ public class WebServerThread extends Thread
       }
     }
   }
-  
+
   private JSONObject toServerJsonEncode()
   {
     JSONObject j = null;
     try
     {
-      Map<String,String> mss=new HashMap<String,String>();
-      mss.put("beamLeftX", String.valueOf(movable.getBeamLeftX()));
+      Map<String, String> mss = new HashMap<String, String>();
       mss.put("beamLeftY", String.valueOf(movable.getBeamLeftY()));
       mss.put("balX", String.valueOf(movable.getBalX()));
       mss.put("balY", String.valueOf(movable.getBalY()));
+      mss.put("balDirX", String.valueOf(movable.getBalDirX()));
+      mss.put("balDirY", String.valueOf(movable.getBalDirY()));
       mss.put("score", String.valueOf(movable.getScore()));
 
-      j=new JSONObject(mss);
+      j = new JSONObject(mss);
     }
-    catch(Exception e)
+    catch (Exception e)
     {
-      System.out.println("error in toServerJsonEncode() in WebClient: " + e);
+      System.out.println("error in toServerJsonEncode() in WebServerThread: " + e);
     }
     return j;
   }
-  
+
   private void readJson(String inputLine)
   {
     try
     {
-      WebJsonReader reader = new WebJsonReader(inputLine);
+      reader.setString(inputLine);
       mss = reader.getPartAsMap();
 
-      movable.setBeamRightX(Double.parseDouble(mss.get("beamRightX")));
-      movable.setBeamRightY(Double.parseDouble(mss.get("beamRightY")));
-      //System.out.println(mss.get("beamRightX"));
+      Platform.runLater(new Runnable()
+      {
+        @Override public void run()
+        {
+          movable.setBeamRightY(Double.parseDouble(mss.get("beamRightY")));
+        }
+      });
     }
     catch (JSONException e)
     {

@@ -27,7 +27,7 @@ public class WebServerUdp extends Thread {
           
           socket.send(packet);
           Sleeper sleep = new Sleeper();
-          sleep.sleeper(100);
+          sleep.sleeper(300);
         }
         catch(Exception e)
         {

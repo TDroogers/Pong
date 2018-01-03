@@ -12,7 +12,7 @@ public class Controll
   Score score;
   Message message;
   Pause pause;
-  String side = "co op";
+  String side = "co up";
 
   public Controll(Beam left, Beam right, Bal bal, Score score, Message message, Pause pause)
   {
@@ -34,7 +34,7 @@ public class Controll
     this.keyDown = keyCode;
     switch (side)
     {
-      case "co op":
+      case "co up":
         beamStart();
         break;
 
@@ -53,7 +53,7 @@ public class Controll
     this.keyUp = keyCode;
     switch (side)
     {
-      case "co op":
+      case "co up":
         beamStop();
         break;
 
@@ -66,6 +66,14 @@ public class Controll
         break;
     }
   }
+  
+  /*
+   * ==============================================================
+   * 
+   * Private function's
+   * 
+   * ==============================================================
+   */
 
   private void beamStop()
   {

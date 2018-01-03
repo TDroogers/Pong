@@ -78,30 +78,6 @@ public class Beam extends Rectangle
   }
   
   /*
-   * External controll functions
-   */
-  
-  public double getBeamX()
-  {
-    return getX();
-  }
-  
-  public double getBeamY()
-  {
-    return getY();
-  }
-  
-  public void setBeamX(double newX)
-  {
-    setX(newX);
-  }
-  
-  public void setBeamY(double newY)
-  {
-    setY(newY);
-  }
-  
-  /*
    * private function's
    */
 

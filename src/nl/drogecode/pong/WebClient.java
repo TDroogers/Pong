@@ -3,18 +3,25 @@
  */
 package nl.drogecode.pong;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import javafx.application.Platform;
+
 public class WebClient
 {
-  MovableObjects movable;
-  Map<String,String> mss;
+  private MovableObjects movable;
+  private Map<String,String> mss;
+  private WebJsonReader reader = new WebJsonReader();
 
   public boolean client(MovableObjects movable) throws IOException
   {
@@ -47,27 +54,22 @@ public class WebClient
         else
         {
           readJson(fromServer);
-          //System.out.println("Server: " + fromServer);
-          if (fromServer.equals("Bye."))
-          {
-            break;
-          }
         }
 
 
         out.println(toServerJsonEncode());
-        sleep.sleeper(20);
+        sleep.sleeper(30);
       }
     }
     catch (UnknownHostException e)
     {
       System.err.println("Don't know about host " + hostName);
-      System.exit(1);
+      movable.setPlayer("co up");
     }
     catch (IOException e)
     {
       System.err.println("Couldn't get I/O for the connection to " + hostName);
-      System.exit(1);
+      movable.setPlayer("co up");
     }
     return true;
   }
@@ -78,7 +80,6 @@ public class WebClient
     try
     {
       Map<String,String> mss=new HashMap<String,String>();
-      mss.put("beamRightX", String.valueOf(movable.getBeamRightX()));
       mss.put("beamRightY", String.valueOf(movable.getBeamRightY()));
 
       j=new JSONObject(mss);
@@ -94,17 +95,21 @@ public class WebClient
   {
     try
     {
-      //System.out.println(fromServer);
-      
-      WebJsonReader reader = new WebJsonReader(fromServer);
+      reader.setString(fromServer);
       mss = reader.getPartAsMap();
 
-      movable.setBeamLeftX(Double.parseDouble(mss.get("beamLeftX")));
-      movable.setBeamLeftY(Double.parseDouble(mss.get("beamLeftY")));
-      movable.setBalX(Double.parseDouble(mss.get("balX")));
-      movable.setBalY(Double.parseDouble(mss.get("balY")));
-      movable.setScore(mss.get("score"));
-      //System.out.println(mss.get("beamLeftX"));
+      Platform.runLater(new Runnable()
+      {
+        @Override public void run()
+        {
+          movable.setBeamLeftY(Double.parseDouble(mss.get("beamLeftY")));
+          movable.setBalX(Double.parseDouble(mss.get("balX")));
+          movable.setBalY(Double.parseDouble(mss.get("balY")));
+          movable.setBalDirY(Double.parseDouble(mss.get("balDirX")));
+          movable.setBalDirY(Double.parseDouble(mss.get("balDirY")));
+          movable.setScore(mss.get("score"));
+        }
+      });
     }
     catch (JSONException e)
     {

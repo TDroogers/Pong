@@ -1,3 +1,6 @@
+/*
+ * Shows and updates the score on top of the screen.
+ */
 package nl.drogecode.pong;
 
 import javafx.stage.Stage;
@@ -46,6 +49,12 @@ public class Score extends TextCenter
     }
     updateScore();
     return true;
+  }
+  
+  public void setFullText(String text)
+  {
+    setText(text);
+    setCenter();
   }
 
   private void updateScore()
