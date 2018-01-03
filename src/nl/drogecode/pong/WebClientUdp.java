@@ -15,7 +15,7 @@ public class WebClientUdp
     socket = new MulticastSocket(4446);
     group = InetAddress.getByName("230.0.0.1");
     socket.joinGroup(group);
-    socket.setSoTimeout(1000);
+    socket.setSoTimeout(5000);
   }
 
   public String getBroadcast() throws IOException

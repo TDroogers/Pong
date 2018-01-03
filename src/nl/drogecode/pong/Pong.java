@@ -58,10 +58,9 @@ public class Pong extends Application
       contr.setRelease(e.getCode());
     });
 
-    MovableObjects movable = new MovableObjects(contr, rLeft, rRight, bal);
+    MovableObjects movable = new MovableObjects(contr, rLeft, rRight, bal, score, message);
 
     webSender.setControll(movable);
-    webSender.setPrimaryStage(primaryStage);
   }
 
   private Scene setScene(Settings settings, WebSender webSender, Group root, BorderPane pane)

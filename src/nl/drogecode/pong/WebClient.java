@@ -8,11 +8,13 @@ import java.net.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class WebClient
 {
   MovableObjects movable;
+  Map<String,String> mss;
 
   public boolean client(MovableObjects movable) throws IOException
   {
@@ -38,9 +40,19 @@ public class WebClient
 
       while ((fromServer = in.readLine()) != null)
       {
-        System.out.println("Server: " + fromServer);
-        if (fromServer.equals("Bye."))
-          break;
+        if (fromServer.equals("hello"))
+        {
+          System.out.println("connection made");
+        }
+        else
+        {
+          readJson(fromServer);
+          //System.out.println("Server: " + fromServer);
+          if (fromServer.equals("Bye."))
+          {
+            break;
+          }
+        }
 
 
         out.println(toServerJsonEncode());
@@ -70,13 +82,33 @@ public class WebClient
       mss.put("beamRightY", String.valueOf(movable.getBeamRightY()));
 
       j=new JSONObject(mss);
-
-      //System.out.println(j);
     }
     catch(Exception e)
     {
       System.out.println("error in toServerJsonEncode() in WebClient: " + e);
     }
     return j;
+  }
+  
+  private void readJson(String fromServer)
+  {
+    try
+    {
+      //System.out.println(fromServer);
+      
+      WebJsonReader reader = new WebJsonReader(fromServer);
+      mss = reader.getPartAsMap();
+
+      movable.setBeamLeftX(Double.parseDouble(mss.get("beamLeftX")));
+      movable.setBeamLeftY(Double.parseDouble(mss.get("beamLeftY")));
+      movable.setBalX(Double.parseDouble(mss.get("balX")));
+      movable.setBalY(Double.parseDouble(mss.get("balY")));
+      movable.setScore(mss.get("score"));
+      //System.out.println(mss.get("beamLeftX"));
+    }
+    catch (JSONException e)
+    {
+      e.printStackTrace();
+    }
   }
 }

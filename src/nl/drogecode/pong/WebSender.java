@@ -9,14 +9,12 @@ package nl.drogecode.pong;
 import java.io.IOException;
 
 import javafx.concurrent.Task;
-import javafx.stage.Stage;
 
 public class WebSender
 {
 
   private WebClient client;
   private WebServer server;
-  private Stage stage;
   private MovableObjects movable;
   
   public WebSender()
@@ -43,11 +41,6 @@ public class WebSender
   public void setControll(MovableObjects movable)
   {
     this.movable = movable;
-  }
-  
-  public void setPrimaryStage(Stage primaryStage)
-  {
-    this.stage = primaryStage;
   }
   
   private void insideThread()

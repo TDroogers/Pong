@@ -22,6 +22,12 @@ public class Message extends TextCenter
       messageOff();
     }
   }
+  
+  public void setDifferentMessage(String mes)
+  {
+    setText(mes);
+    setCenter();
+  }
 
   private void messageOn()
   {

@@ -1,9 +1,11 @@
 package nl.drogecode.pong;
 
 import java.net.*;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.*;
 
@@ -25,16 +27,15 @@ public class WebServerThread extends Thread
     try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));)
     {
-      String inputLine, outputLine;
-      WebServerProtocol kkp = new WebServerProtocol();
-      outputLine = kkp.processInput(null);
-      out.println(outputLine);
+      String inputLine;
+      JSONObject outputLine;
+      out.println("hello");
 
       while ((inputLine = in.readLine()) != null)
       {
-        System.out.println(inputLine);
+        //System.out.println(inputLine);
         readJson(inputLine);
-        outputLine = kkp.processInput(inputLine);
+        outputLine = toServerJsonEncode();
         out.println(outputLine);
         if (outputLine.equals("Bye"))
           break;
@@ -57,6 +58,27 @@ public class WebServerThread extends Thread
     }
   }
   
+  private JSONObject toServerJsonEncode()
+  {
+    JSONObject j = null;
+    try
+    {
+      Map<String,String> mss=new HashMap<String,String>();
+      mss.put("beamLeftX", String.valueOf(movable.getBeamLeftX()));
+      mss.put("beamLeftY", String.valueOf(movable.getBeamLeftY()));
+      mss.put("balX", String.valueOf(movable.getBalX()));
+      mss.put("balY", String.valueOf(movable.getBalY()));
+      mss.put("score", String.valueOf(movable.getScore()));
+
+      j=new JSONObject(mss);
+    }
+    catch(Exception e)
+    {
+      System.out.println("error in toServerJsonEncode() in WebClient: " + e);
+    }
+    return j;
+  }
+  
   private void readJson(String inputLine)
   {
     try
@@ -66,7 +88,7 @@ public class WebServerThread extends Thread
 
       movable.setBeamRightX(Double.parseDouble(mss.get("beamRightX")));
       movable.setBeamRightY(Double.parseDouble(mss.get("beamRightY")));
-      System.out.println(mss.get("beamRightX"));
+      //System.out.println(mss.get("beamRightX"));
     }
     catch (JSONException e)
     {
