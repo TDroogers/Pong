@@ -52,6 +52,7 @@ public class WebServerThread extends Thread
           calMax = difference;
           System.out.println(calMax);
         }
+        System.out.println(calMax + " : " + difference);
 
       }
     }
