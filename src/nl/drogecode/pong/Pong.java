@@ -26,7 +26,7 @@ public class Pong extends Application
     WebSender webSender = new WebSender();
     Group root = new Group();
     BorderPane pane = new BorderPane();
-    Scene scene = setScene(settings, webSender, root, pane);
+    Scene scene = getScene(settings, webSender, root, pane);
     primaryStage.setScene(scene);
 
     /*
@@ -67,7 +67,7 @@ public class Pong extends Application
     webSender.setControll(movable);
   }
 
-  private Scene setScene(Settings settings, WebSender webSender, Group root, BorderPane pane)
+  private Scene getScene(Settings settings, WebSender webSender, Group root, BorderPane pane)
   {
     /*
      * https://docs.oracle.com/javafx/2/ui_controls/menu_controls.htm
