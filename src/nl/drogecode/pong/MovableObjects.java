@@ -18,7 +18,7 @@ public class MovableObjects
     this.score = score;
     this.message = message;
   }
-  
+
   /*
    * First the getters.
    */
@@ -26,51 +26,51 @@ public class MovableObjects
   {
     return rRight.getX();
   }
-  
+
   public double getBeamRightY()
   {
     return rRight.getY();
   }
-  
+
   public double getBeamLeftX()
   {
     return rLeft.getX();
   }
-  
+
   public double getBeamLeftY()
   {
     return rLeft.getY();
   }
-  
+
   public double getBalX()
   {
     return bal.getCenterX();
   }
-  
+
   public double getBalY()
   {
     return bal.getCenterY();
   }
-  
+
   public double getBalDirX()
   {
     return bal.getDirX();
   }
-  
+
   public double getBalDirY()
   {
     return bal.getDirY();
   }
-  
+
   public String getScore()
   {
     return score.getText();
   }
-  
+
   /*
    * Setters.
    */
-  
+
   public void setPlayer(String side)
   {
     contr.setPlayer(side);
@@ -85,47 +85,47 @@ public class MovableObjects
       bal.setClient(false);
     }
   }
-  
+
   public void setBeamRightX(double newX)
   {
     rRight.setX(newX);
   }
-  
+
   public void setBeamRightY(double newY)
   {
     rRight.setY(newY);
   }
-  
+
   public void setBeamLeftX(double newX)
   {
     rLeft.setX(newX);
   }
-  
+
   public void setBeamLeftY(double newX)
   {
     rLeft.setY(newX);
   }
-  
+
   public void setBalX(double newX)
   {
     bal.setCenterX(newX);
   }
-  
+
   public void setBalY(double newY)
   {
     bal.setCenterY(newY);
   }
-  
+
   public void setBalDirX(double dir)
   {
     bal.setDirX(dir);
   }
-  
+
   public void setBalDirY(double dir)
   {
     bal.setDirY(dir);
   }
-  
+
   public void setScore(String score)
   {
     this.score.setFullText(score);

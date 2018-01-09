@@ -18,7 +18,7 @@ public class Settings
 
   // score
   private int winScore = 3;
-  
+
   // web*
   private static String url = "http://localhost/herbouw/";
 
@@ -81,9 +81,9 @@ public class Settings
   {
     return winScore;
   }
-  
+
   // web*
-  
+
   public static String getUrl()
   {
     return url;

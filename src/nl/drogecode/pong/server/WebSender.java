@@ -17,13 +17,13 @@ public class WebSender
   private WebClient client;
   private WebServer server;
   private MovableObjects movable;
-  
+
   public WebSender()
   {
     client = new WebClient();
     server = new WebServer();
   }
-  
+
   public void connect()
   {
     Task<Void> task = new Task<Void>()
@@ -38,12 +38,12 @@ public class WebSender
     th.setDaemon(true);
     th.start();
   }
-  
+
   public void setControll(MovableObjects movable)
   {
     this.movable = movable;
   }
-  
+
   private void insideThread()
   {
     try

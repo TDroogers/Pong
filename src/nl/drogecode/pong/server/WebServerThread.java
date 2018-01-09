@@ -47,7 +47,7 @@ public class WebServerThread extends Thread
         long calnieuw = Calendar.getInstance().getTimeInMillis();
         long difference = calnieuw - cal;
         cal = calnieuw;
-        
+
         if (difference > calMax)
         {
           calMax = difference;

@@ -76,7 +76,7 @@ public class Beam extends Rectangle
   {
     return fromBoarder;
   }
-  
+
   /*
    * private function's
    */

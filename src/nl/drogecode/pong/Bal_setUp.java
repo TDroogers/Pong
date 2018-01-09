@@ -33,7 +33,6 @@ public class Bal_setUp extends Circle
     this.right = right;
     this.score = score;
     this.pause = pause;
-    
 
     this.sleep = new Sleeper();
 
@@ -65,7 +64,6 @@ public class Bal_setUp extends Circle
     else
       return false;
   }
-
 
   protected boolean setDirection(double dir)
   {

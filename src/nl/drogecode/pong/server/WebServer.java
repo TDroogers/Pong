@@ -22,7 +22,7 @@ public class WebServer
     WebServerUdp serUdp = new WebServerUdp();
     this.movable = movable;
     serUdp.start();
-    
+
     boolean listening = true;
     System.out.println(InetAddress.getLocalHost());
     try (ServerSocket serverSocket = new ServerSocket(PORTNUMBER))

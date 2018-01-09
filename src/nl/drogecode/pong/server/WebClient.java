@@ -22,7 +22,7 @@ import nl.drogecode.pong.Sleeper;
 public class WebClient
 {
   private MovableObjects movable;
-  private Map<String,String> mss;
+  private Map<String, String> mss;
   private WebJsonReader reader = new WebJsonReader();
 
   public boolean client(MovableObjects movable) throws IOException
@@ -58,7 +58,6 @@ public class WebClient
           readJson(fromServer);
         }
 
-
         out.println(toServerJsonEncode());
         sleep.sleeper(30);
       }
@@ -81,18 +80,18 @@ public class WebClient
     JSONObject j = null;
     try
     {
-      Map<String,String> mss=new HashMap<String,String>();
+      Map<String, String> mss = new HashMap<String, String>();
       mss.put("beamRightY", String.valueOf(movable.getBeamRightY()));
 
-      j=new JSONObject(mss);
+      j = new JSONObject(mss);
     }
-    catch(Exception e)
+    catch (Exception e)
     {
       System.out.println("error in toServerJsonEncode() in WebClient: " + e);
     }
     return j;
   }
-  
+
   private void readJson(String fromServer)
   {
     try

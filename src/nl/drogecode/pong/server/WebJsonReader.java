@@ -18,7 +18,7 @@ public class WebJsonReader
 
   private JSONObject json;
   private String id = "";
-  Map<String,String> mss;
+  Map<String, String> mss;
 
   public void setString(String webResult)
   {
@@ -32,13 +32,13 @@ public class WebJsonReader
     }
   }
 
-  public Map<String,String> getPartAsMap() throws JSONException
+  public Map<String, String> getPartAsMap() throws JSONException
   {
-    mss = new HashMap<String,String>();
+    mss = new HashMap<String, String>();
     Iterator<?> keys = json.keys();
 
     loopInsideLoop(keys, json);
-    
+
     return mss;
   }
 

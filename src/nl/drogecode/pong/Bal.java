@@ -57,7 +57,7 @@ public class Bal extends Bal_setUp
   {
     dirY = dir;
   }
-  
+
   /*
    * private stuff from here.
    */
