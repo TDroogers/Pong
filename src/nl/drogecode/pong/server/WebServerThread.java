@@ -1,4 +1,4 @@
-package nl.drogecode.pong;
+package nl.drogecode.pong.server;
 
 import java.net.*;
 import java.util.Calendar;
@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javafx.application.Platform;
+import nl.drogecode.pong.MovableObjects;
 
 import java.io.*;
 

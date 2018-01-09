@@ -1,7 +1,7 @@
 /*
  * from: https://docs.oracle.com/javase/tutorial/networking/sockets/clientServer.html
  */
-package nl.drogecode.pong;
+package nl.drogecode.pong.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +16,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javafx.application.Platform;
+import nl.drogecode.pong.MovableObjects;
+import nl.drogecode.pong.Sleeper;
 
 public class WebClient
 {

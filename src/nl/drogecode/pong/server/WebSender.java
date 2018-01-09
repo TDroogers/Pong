@@ -4,11 +4,12 @@
  * 
  */
 
-package nl.drogecode.pong;
+package nl.drogecode.pong.server;
 
 import java.io.IOException;
 
 import javafx.concurrent.Task;
+import nl.drogecode.pong.MovableObjects;
 
 public class WebSender
 {

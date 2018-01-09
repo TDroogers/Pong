@@ -4,9 +4,12 @@
  * from: https://docs.oracle.com/javase/tutorial/networking/sockets/clientServer.html
  *       https://docs.oracle.com/javase/tutorial/networking/datagrams/broadcasting.html
  */
-package nl.drogecode.pong;
+package nl.drogecode.pong.server;
 
 import java.net.*;
+
+import nl.drogecode.pong.MovableObjects;
+
 import java.io.*;
 
 public class WebServer

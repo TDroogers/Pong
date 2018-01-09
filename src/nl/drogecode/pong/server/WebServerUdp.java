@@ -1,6 +1,8 @@
-package nl.drogecode.pong;
+package nl.drogecode.pong.server;
 
 import java.net.*;
+
+import nl.drogecode.pong.Sleeper;
 
 public class WebServerUdp extends Thread {
   

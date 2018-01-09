@@ -4,7 +4,7 @@
  * 
  */
 
-package nl.drogecode.pong;
+package nl.drogecode.pong.server;
 
 import java.util.HashMap;
 import java.util.Iterator;
