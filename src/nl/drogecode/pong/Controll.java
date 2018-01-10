@@ -16,7 +16,7 @@ public class Controll
   Score score;
   Message message;
   Pause pause;
-  String side = "co up";
+  String side = "co-op";
 
   public Controll(Beam left, Beam right, Bal bal, Score score, Message message, Pause pause)
   {
@@ -38,7 +38,7 @@ public class Controll
     this.keyDown = keyCode;
     switch (side)
     {
-      case "co up":
+      case "co-op":
         beamStart();
         break;
 
@@ -57,7 +57,7 @@ public class Controll
     this.keyUp = keyCode;
     switch (side)
     {
-      case "co up":
+      case "co-op":
         beamStop();
         break;
 

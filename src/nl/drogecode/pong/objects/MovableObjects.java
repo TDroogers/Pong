@@ -70,6 +70,16 @@ public class MovableObjects
   {
     return score.getText();
   }
+  
+  public int getScoreRight()
+  {
+    return score.getScoreRight();
+  }
+  
+  public int getScoreLeft()
+  {
+    return score.getScoreLeft();
+  }
 
   /*
    * Setters.
@@ -90,24 +100,13 @@ public class MovableObjects
     }
   }
 
-  public void setBeamRightX(double newX)
-  {
-    rRight.setX(newX);
-  }
-
   public void setBeamRightY(double newY)
   {
     rRight.setY(newY);
   }
-
-  public void setBeamLeftX(double newX)
+  public void setBeamLeftY(double newY)
   {
-    rLeft.setX(newX);
-  }
-
-  public void setBeamLeftY(double newX)
-  {
-    rLeft.setY(newX);
+    rLeft.setY(newY);
   }
 
   public void setBalX(double newX)
@@ -133,5 +132,20 @@ public class MovableObjects
   public void setScore(String score)
   {
     this.score.setFullText(score);
+  }
+  
+  public void setScoreRestart()
+  {
+    this.score.restart();
+  }
+  
+  public void setScoreRight(int right)
+  {
+    this.score.setScoreRight(right);
+  }
+  
+  public void setScoreLeft(int left)
+  {
+    this.score.setScoreLeft(left);
   }
 }

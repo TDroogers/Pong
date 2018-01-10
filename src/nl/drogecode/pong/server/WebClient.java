@@ -9,11 +9,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.HashMap;
-import java.util.Map;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import javafx.application.Platform;
 import nl.drogecode.pong.Sleeper;
@@ -22,8 +17,11 @@ import nl.drogecode.pong.objects.MovableObjects;
 public class WebClient
 {
   private MovableObjects movable;
-  private Map<String, String> mss;
-  private WebJsonReader reader = new WebJsonReader();
+  private double previus, currentY, oldSerY, oldBalX, oldBalY, oldDirX, oldDirY, curSerY, curBalX, curBalY, curDirX,
+      curDirY;
+  private int scoreL, scoreR;
+  private byte ret;
+  private boolean scored;
 
   public boolean client(MovableObjects movable) throws IOException
   {
@@ -49,72 +47,117 @@ public class WebClient
 
       while ((fromServer = in.readLine()) != null)
       {
-        if (fromServer.equals("hello"))
+        if (fromServer.substring(0, 5).equals("hello"))
         {
           System.out.println("connection made");
+          previus = movable.getBeamRightY();
+          readFullString(fromServer);
         }
         else
         {
-          readJson(fromServer);
+          readString(fromServer);
         }
 
-        out.println(toServerJsonEncode());
+        out.println(toServerByte());
         sleep.sleeper(30);
       }
     }
     catch (UnknownHostException e)
     {
       System.err.println("Don't know about host " + hostName);
-      movable.setPlayer("co up");
+      movable.setPlayer("co-op");
     }
     catch (IOException e)
     {
       System.err.println("Couldn't get I/O for the connection to " + hostName);
-      movable.setPlayer("co up");
+      movable.setPlayer("co-op");
     }
     return true;
   }
 
-  private JSONObject toServerJsonEncode()
+  /*
+   * data efficient version
+   */
+  private byte toServerByte()
   {
-    JSONObject j = null;
+    currentY = movable.getBeamRightY();
+    ret = (byte) (currentY - previus);
+    previus = currentY;
+    return ret;
+  }
+
+  private void readFullString(String fromServer)
+  {
+    String[] ary = fromServer.split("/");
     try
     {
-      Map<String, String> mss = new HashMap<String, String>();
-      mss.put("beamRightY", String.valueOf(movable.getBeamRightY()));
-
-      j = new JSONObject(mss);
+      oldSerY = Double.parseDouble(ary[1]);
+      oldBalX = Double.parseDouble(ary[2]);
+      oldBalY = Double.parseDouble(ary[3]);
+      oldDirX = Double.parseDouble(ary[4]);
+      oldDirY = Double.parseDouble(ary[5]);
+      scoreL = Integer.parseInt(ary[6]);
+      scoreR = Integer.parseInt(ary[7]);
     }
     catch (Exception e)
     {
-      System.out.println("error in toServerJsonEncode() in WebClient: " + e);
+      System.out.println("error woeps: " + e);
     }
-    return j;
+    scored = true;
+    updateScreen();
   }
 
-  private void readJson(String fromServer)
+  private void readString(String fromServer)
   {
+    String[] ary = fromServer.split("/");
     try
     {
-      reader.setString(fromServer);
-      mss = reader.getPartAsMap();
-
-      Platform.runLater(new Runnable()
+      curSerY = Double.parseDouble(ary[0]);
+      curBalX = Double.parseDouble(ary[1]);
+      curBalY = Double.parseDouble(ary[2]);
+      curDirX = Double.parseDouble(ary[3]);
+      curDirY = Double.parseDouble(ary[4]);
+      
+      if (ary.length > 5)
       {
-        @Override public void run()
-        {
-          movable.setBeamLeftY(Double.parseDouble(mss.get("beamLeftY")));
-          movable.setBalX(Double.parseDouble(mss.get("balX")));
-          movable.setBalY(Double.parseDouble(mss.get("balY")));
-          movable.setBalDirY(Double.parseDouble(mss.get("balDirX")));
-          movable.setBalDirY(Double.parseDouble(mss.get("balDirY")));
-          movable.setScore(mss.get("score"));
-        }
-      });
+        scoreL = Integer.parseInt(ary[5]);
+        scoreR = Integer.parseInt(ary[6]);
+        scored = true;
+      }
     }
-    catch (JSONException e)
+    catch (Exception e)
     {
-      e.printStackTrace();
+      System.out.println("error woeps: " + e);
     }
+    
+    oldSerY += curSerY;
+    oldBalX += curBalX;
+    oldBalY += curBalY;
+    oldDirX += curDirX;
+    oldDirY += curDirY;
+    
+    movable.setScoreRestart();
+    updateScreen();
+  }
+
+  private void updateScreen()
+  {
+    Platform.runLater(new Runnable()
+    {
+      @Override public void run()
+      {
+        movable.setBeamLeftY(oldSerY);
+        movable.setBalX(oldBalX);
+        movable.setBalY(oldBalY);
+        movable.setBalDirX(oldDirX);
+        movable.setBalDirY(oldDirY);
+        if(scored)
+        {
+          movable.setScoreLeft(scoreL);
+          movable.setScoreRight(scoreR);
+          scored = false;
+        }
+      }
+    });
   }
 }

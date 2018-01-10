@@ -156,7 +156,7 @@ public class Bal extends Bal_setUp
   {
     if (newX < 0 && rOrL == -1)
     {
-      if (!score.setScoreLeft())
+      if (!score.setScoreLeftPlus())
       {
         return false;
       }
@@ -164,7 +164,7 @@ public class Bal extends Bal_setUp
     }
     else if (newX > maxX && rOrL == 1)
     {
-      if (!score.setScoreRight())
+      if (!score.setScoreRightPlus())
       {
         return false;
       }
