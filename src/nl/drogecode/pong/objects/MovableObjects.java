@@ -89,6 +89,7 @@ public class MovableObjects
   {
     contr.setPlayer(side);
     message.setDifferentMessage(side);
+    
     if (side.equals("client"))
     {
       bal.setClient(true);
@@ -111,12 +112,12 @@ public class MovableObjects
 
   public void setBalX(double newX)
   {
-    bal.setCenterX(newX);
+    bal.setX(newX);
   }
 
   public void setBalY(double newY)
   {
-    bal.setCenterY(newY);
+    bal.setY(newY);
   }
 
   public void setBalDirX(double dir)
@@ -144,13 +145,5 @@ public class MovableObjects
   {
     System.out.println("left: " + left);
     this.score.setScoreLeft(left);
-  }
-  
-  /*
-   * actions
-   */
-  public void resetBal()
-  {
-    bal.nextGame();
   }
 }

@@ -1,23 +1,24 @@
 package nl.drogecode.pong.web.client;
 
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.SocketException;
 
 import nl.drogecode.pong.Sleeper;
 import nl.drogecode.pong.objects.MovableObjects;
 
 public class ProducerC extends Thread
 {
-  PrintWriter out;
+  Socket socket;
   MovableObjects movable;
-  
 
   private double previus, currentY;
   private byte ret;
-  
-  
-  public ProducerC (PrintWriter out, MovableObjects movable)
+
+  public ProducerC(Socket socket, MovableObjects movable)
   {
-    this.out = out;
+    this.socket = socket;
     this.movable = movable;
   }
 
@@ -26,13 +27,26 @@ public class ProducerC extends Thread
     Sleeper sleep = new Sleeper();
     previus = movable.getBeamRightY();
 
-    for(;;)
+    try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true);)
     {
-      out.println(toServerByte());
-      sleep.sleeper(Long.MAX_VALUE);
+      for (;;)
+      {
+        out.println(toServerByte());
+        yield();
+        sleep.sleeper(Long.MAX_VALUE);
+      }
+    }
+
+    catch (SocketException e)
+    {
+      System.err.println("Connection lost with server: " + e);
+      movable.setPlayer("co-op");
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
     }
   }
-  
 
   private byte toServerByte()
   {

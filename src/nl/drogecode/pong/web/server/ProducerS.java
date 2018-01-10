@@ -1,13 +1,10 @@
 package nl.drogecode.pong.web.server;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Calendar;
 
-import javafx.application.Platform;
+import nl.drogecode.pong.Sleeper;
 import nl.drogecode.pong.objects.MovableObjects;
 
 public class ProducerS extends Thread
@@ -15,10 +12,8 @@ public class ProducerS extends Thread
   private Socket socket = null;
   private MovableObjects movable;
   String inputLine, outputLine;
-  private long cal = Calendar.getInstance().getTimeInMillis();
-  private long calMax = 0;
   private byte oldScoreL, oldScoreR, curScoreL, curScoreR;
-  private double oldClientY, oldSerY, oldBalX, oldBalY, oldDirX, oldDirY;
+  private double oldSerY, oldBalX, oldBalY, oldDirX, oldDirY;
   private double curSerY, curBalX, curBalY, curDirX, curDirY;
 
   public ProducerS(Socket socket, MovableObjects movable)
@@ -26,7 +21,6 @@ public class ProducerS extends Thread
     super("KKMultiServerThread " + socket.getLocalPort());
     this.socket = socket;
     this.movable = movable;
-    oldClientY = movable.getBeamRightY();
     oldSerY = movable.getBeamLeftY();
     oldBalX = movable.getBalX();
     oldBalY = movable.getBalY();
@@ -38,32 +32,20 @@ public class ProducerS extends Thread
 
   @Override public void run()
   {
-    try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));)
+    try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true);)
     {
+      Sleeper sleep = new Sleeper();
       outputLine = toClintFullString();
       out.println("hello/" + outputLine);
 
       for (;;)
       {
-        inputLine = in.readLine();
-        readByte(inputLine);
         outputLine = toClientString();
         out.println(outputLine);
 
-        long calnieuw = Calendar.getInstance().getTimeInMillis();
-        long difference = calnieuw - cal;
-        cal = calnieuw;
-
-        if (difference > calMax)
-        {
-          calMax = difference;
-          System.out.println(calMax);
-        }
-        System.out.println(calMax + " : " + difference);
-        
         yield();
-        
+        sleep.sleeper(Long.MAX_VALUE);
+
       }
     }
     catch (IOException e)
@@ -87,31 +69,6 @@ public class ProducerS extends Thread
   /*
    * data efficient version
    */
-  private void readByte(String inputLine)
-  {
-    try
-    {
-      double result = Double.parseDouble(inputLine);
-      result += oldClientY;
-      updateBeamClientY(result);
-      oldClientY = result;
-    }
-    catch (Exception e)
-    {
-      System.out.println("not a byte: " + e);
-    }
-  }
-
-  private void updateBeamClientY(double newY)
-  {
-    Platform.runLater(new Runnable()
-    {
-      @Override public void run()
-      {
-        movable.setBeamRightY(newY);
-      }
-    });
-  }
 
   private String toClintFullString()
   {

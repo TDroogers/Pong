@@ -12,6 +12,8 @@ public class Bal extends Bal_setUp
   private volatile int clear = 0;
   private volatile double maxX;
   private volatile double maxY;
+  private volatile double serverX;
+  private volatile double serverY;
   private volatile double x;
   private volatile double y;
   private volatile boolean firstSpeedUp = true;
@@ -58,6 +60,16 @@ public class Bal extends Bal_setUp
   public void setDirY(double dir)
   {
     dirY = dir;
+  }
+
+  public void setX(double setX)
+  {
+    serverX = setX;
+  }
+
+  public void setY(double setY)
+  {
+    serverY = setY;
   }
 
   /*
@@ -116,9 +128,13 @@ public class Bal extends Bal_setUp
       return false;
     }
 
+    if (client)
+    {
+      updateFromServer();
+    }
     updateBal();
 
-    if (!sleep.sleeper((int) speedUp) || breaker || client)
+    if (!sleep.sleeper((int) speedUp) || breaker)
     {
       breaker = false;
       return false;
@@ -142,7 +158,7 @@ public class Bal extends Bal_setUp
       dirY *= -1;
       newY = y;
     }
-    else if (clear <= 0 && client == false)
+    else if (clear <= 0)
     {
       if (!getPointCheck())
       {
@@ -156,7 +172,7 @@ public class Bal extends Bal_setUp
   {
     if (newX < 0 && rOrL == -1)
     {
-      if (!score.setScoreLeftPlus())
+      if (!client && !score.setScoreLeftPlus())
       {
         return false;
       }
@@ -164,7 +180,7 @@ public class Bal extends Bal_setUp
     }
     else if (newX > maxX && rOrL == 1)
     {
-      if (!score.setScoreRightPlus())
+      if (!client && !score.setScoreRightPlus())
       {
         return false;
       }
@@ -172,6 +188,16 @@ public class Bal extends Bal_setUp
     }
 
     return true;
+  }
+
+  private void updateFromServer()
+  {
+    if (serverX != 0 || serverY != 0)
+    {
+      newX = serverX;
+      newY = serverY;
+      serverX = serverY = 0;
+    }
   }
 
   private void updateBal()

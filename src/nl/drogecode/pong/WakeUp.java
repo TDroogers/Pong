@@ -5,7 +5,8 @@ import java.util.TimerTask;
 
 public class WakeUp
 {
-  Timer timer;
+  private Timer timer;
+  private final int SLEEPTIME = 30;
   
   public WakeUp()
   {
@@ -14,7 +15,7 @@ public class WakeUp
   
   public synchronized void setNewThread(Thread thread)
   {
-    timer.schedule(new runningThreadWaker(thread), 1000);
+    timer.schedule(new runningThreadWaker(thread), SLEEPTIME);
   }
   
   private class runningThreadWaker extends TimerTask
@@ -27,9 +28,8 @@ public class WakeUp
 
     @Override public void run()
     {
-      timer.schedule(new runningThreadWaker(thread), 1000);
+      timer.schedule(new runningThreadWaker(thread), SLEEPTIME);
       thread.interrupt();
-      System.out.println("wake UP!");
     }
     
   }

@@ -2,31 +2,35 @@ package nl.drogecode.pong.web.client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+import java.net.SocketException;
 
 import javafx.application.Platform;
 import nl.drogecode.pong.objects.MovableObjects;
 
 public class ConsumerC extends Thread
 {
-  BufferedReader in;
+  Socket socket;
   MovableObjects movable;
 
   private double oldSerY, oldBalX, oldBalY, oldDirX, oldDirY, curSerY, curBalX, curBalY, curDirX, curDirY;
   private int scoreL, scoreR;
   private boolean scored;
 
-  public ConsumerC(BufferedReader in, MovableObjects movable)
+  public ConsumerC(Socket socket, MovableObjects movable)
   {
-    this.in = in;
+    this.socket = socket;
     this.movable = movable;
   }
 
   @Override public void run()
   {
     String fromServer;
-    for (;;)
+
+    try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));)
     {
-      try
+      for (;;)
       {
         fromServer = in.readLine();
         if (fromServer.substring(0, 5).equals("hello"))
@@ -34,17 +38,21 @@ public class ConsumerC extends Thread
           System.out.println("connection made");
           readFullString(fromServer);
           movable.setScoreRestart();
-          movable.resetBal();
         }
         else
         {
           readString(fromServer);
         }
       }
-      catch (IOException e)
-      {
-        e.printStackTrace();
-      }
+    }
+    catch(SocketException e)
+    {
+      System.err.println("connection lost with server: " + e);
+      movable.setPlayer("co-op");
+    }
+    catch (IOException e)
+    {
+      e.printStackTrace();
     }
   }
 
