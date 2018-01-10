@@ -4,10 +4,11 @@
  * from: https://docs.oracle.com/javase/tutorial/networking/sockets/clientServer.html
  *       https://docs.oracle.com/javase/tutorial/networking/datagrams/broadcasting.html
  */
-package nl.drogecode.pong.server;
+package nl.drogecode.pong.web.server;
 
 import java.net.*;
 
+import nl.drogecode.pong.WakeUp;
 import nl.drogecode.pong.objects.MovableObjects;
 
 import java.io.*;
@@ -29,7 +30,8 @@ public class WebServer
     {
       while (listening)
       {
-        new WebServerThread(serverSocket.accept(), movable).start();
+        startNewThread(serverSocket);
+        
         serUdp.stopUdp();
         listening = false;
         movable.setPlayer("server");
@@ -40,5 +42,14 @@ public class WebServer
       System.err.println("Could not listen on port " + PORTNUMBER);
       System.exit(-1);
     }
+  }
+  
+  private void startNewThread(ServerSocket serverSocket) throws IOException
+  {
+    Thread thread = new WebServerThread(serverSocket.accept(), movable);
+    thread.start();
+    
+    WakeUp wake = new WakeUp();
+    wake.setNewThread(thread);
   }
 }

@@ -1,4 +1,4 @@
-package nl.drogecode.pong.server;
+package nl.drogecode.pong.web.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,6 +14,7 @@ public class WebServerThread extends Thread
 {
   private Socket socket = null;
   private MovableObjects movable;
+  String inputLine, outputLine;
   private long cal = Calendar.getInstance().getTimeInMillis();
   private long calMax = 0;
   private byte oldScoreL, oldScoreR, curScoreL, curScoreR;
@@ -25,6 +26,14 @@ public class WebServerThread extends Thread
     super("KKMultiServerThread " + socket.getLocalPort());
     this.socket = socket;
     this.movable = movable;
+    oldClientY = movable.getBeamRightY();
+    oldSerY = movable.getBeamLeftY();
+    oldBalX = movable.getBalX();
+    oldBalY = movable.getBalY();
+    oldDirX = movable.getBalDirX();
+    oldDirY = movable.getBalDirY();
+    oldScoreL = (byte) movable.getScoreLeft();
+    oldScoreR = (byte) movable.getScoreRight();
   }
 
   @Override public void run()
@@ -32,16 +41,6 @@ public class WebServerThread extends Thread
     try (PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));)
     {
-      String inputLine, outputLine;
-      oldClientY = movable.getBeamRightY();
-      oldSerY = movable.getBeamLeftY();
-      oldBalX = movable.getBalX();
-      oldBalY = movable.getBalY();
-      oldDirX = movable.getBalDirX();
-      oldDirY = movable.getBalDirY();
-      oldScoreL = (byte) movable.getScoreLeft();
-      oldScoreR = (byte) movable.getScoreRight();
-
       outputLine = toClintFullString();
       out.println("hello/" + outputLine);
 
@@ -63,8 +62,8 @@ public class WebServerThread extends Thread
         }
         System.out.println(calMax + " : " + difference);
         
-        Thread.yield();
-
+        yield();
+        
       }
     }
     catch (IOException e)

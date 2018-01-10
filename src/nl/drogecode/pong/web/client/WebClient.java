@@ -1,7 +1,7 @@
 /*
  * from: https://docs.oracle.com/javase/tutorial/networking/sockets/clientServer.html
  */
-package nl.drogecode.pong.server;
+package nl.drogecode.pong.web.client;
 
 import java.io.BufferedReader;
 import java.io.IOException;

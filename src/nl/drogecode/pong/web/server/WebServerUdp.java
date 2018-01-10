@@ -1,4 +1,4 @@
-package nl.drogecode.pong.server;
+package nl.drogecode.pong.web.server;
 
 import java.net.*;
 

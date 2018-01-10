@@ -1,15 +1,17 @@
-/*
+/**
  * 
- * test url for browser: http://localhost/herbouw/?load=api&api=java_pong&type=json&step=hello&name=111100000
+ * WebSender first check's if there are servers available, if not, it will make you server.
  * 
  */
 
-package nl.drogecode.pong.server;
+package nl.drogecode.pong.web;
 
 import java.io.IOException;
 
 import javafx.concurrent.Task;
 import nl.drogecode.pong.objects.MovableObjects;
+import nl.drogecode.pong.web.client.WebClient;
+import nl.drogecode.pong.web.server.WebServer;
 
 public class WebSender
 {
