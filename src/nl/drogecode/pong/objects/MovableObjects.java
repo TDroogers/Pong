@@ -128,11 +128,6 @@ public class MovableObjects
   {
     bal.setDirY(dir);
   }
-
-  public void setScore(String score)
-  {
-    this.score.setFullText(score);
-  }
   
   public void setScoreRestart()
   {
@@ -141,11 +136,21 @@ public class MovableObjects
   
   public void setScoreRight(int right)
   {
+    System.out.println("right: " + right);
     this.score.setScoreRight(right);
   }
   
   public void setScoreLeft(int left)
   {
+    System.out.println("left: " + left);
     this.score.setScoreLeft(left);
+  }
+  
+  /*
+   * actions
+   */
+  public void resetBal()
+  {
+    bal.nextGame();
   }
 }

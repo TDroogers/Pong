@@ -12,6 +12,7 @@ import java.net.UnknownHostException;
 
 import javafx.application.Platform;
 import nl.drogecode.pong.Sleeper;
+import nl.drogecode.pong.WakeUp;
 import nl.drogecode.pong.objects.MovableObjects;
 
 public class WebClient
@@ -35,7 +36,7 @@ public class WebClient
       return false;
     }
     System.out.println(hostName);
-
+    
     int portNumber = 2315;
 
     try (Socket kkSocket = new Socket(hostName, portNumber);
@@ -44,22 +45,11 @@ public class WebClient
     {
       String fromServer;
       movable.setPlayer("client");
+      startNewThread(out, in);
 
-      while ((fromServer = in.readLine()) != null)
+      for(;;)
       {
-        if (fromServer.substring(0, 5).equals("hello"))
-        {
-          System.out.println("connection made");
-          previus = movable.getBeamRightY();
-          readFullString(fromServer);
-        }
-        else
-        {
-          readString(fromServer);
-        }
 
-        out.println(toServerByte());
-        sleep.sleeper(30);
       }
     }
     catch (UnknownHostException e)
@@ -74,90 +64,20 @@ public class WebClient
     }
     return true;
   }
+  
+  private void startNewThread(PrintWriter out, BufferedReader in) throws IOException
+  {
+    Thread producer = new ProducerC(out, movable);
+    Thread consumer = new ConsumerC(in, movable);
+    producer.start();
+    consumer.start();
+    
+    WakeUp wake = new WakeUp();
+    wake.setNewThread(producer);
+  }
 
   /*
    * data efficient version
    */
-  private byte toServerByte()
-  {
-    currentY = movable.getBeamRightY();
-    ret = (byte) (currentY - previus);
-    previus = currentY;
-    return ret;
-  }
 
-  private void readFullString(String fromServer)
-  {
-    String[] ary = fromServer.split("/");
-    try
-    {
-      oldSerY = Double.parseDouble(ary[1]);
-      oldBalX = Double.parseDouble(ary[2]);
-      oldBalY = Double.parseDouble(ary[3]);
-      oldDirX = Double.parseDouble(ary[4]);
-      oldDirY = Double.parseDouble(ary[5]);
-      scoreL = Integer.parseInt(ary[6]);
-      scoreR = Integer.parseInt(ary[7]);
-    }
-    catch (Exception e)
-    {
-      System.out.println("error woeps: " + e);
-    }
-    scored = true;
-    updateScreen();
-  }
-
-  private void readString(String fromServer)
-  {
-    String[] ary = fromServer.split("/");
-    try
-    {
-      curSerY = Double.parseDouble(ary[0]);
-      curBalX = Double.parseDouble(ary[1]);
-      curBalY = Double.parseDouble(ary[2]);
-      curDirX = Double.parseDouble(ary[3]);
-      curDirY = Double.parseDouble(ary[4]);
-      
-      if (ary.length > 5)
-      {
-        scoreL = Integer.parseInt(ary[5]);
-        scoreR = Integer.parseInt(ary[6]);
-        scored = true;
-      }
-    }
-    catch (Exception e)
-    {
-      System.out.println("error woeps: " + e);
-    }
-    
-    oldSerY += curSerY;
-    oldBalX += curBalX;
-    oldBalY += curBalY;
-    oldDirX += curDirX;
-    oldDirY += curDirY;
-    
-    movable.setScoreRestart();
-    updateScreen();
-  }
-
-  private void updateScreen()
-  {
-    Platform.runLater(new Runnable()
-    {
-      @Override public void run()
-      {
-        movable.setBeamLeftY(oldSerY);
-        movable.setBalX(oldBalX);
-        movable.setBalY(oldBalY);
-        movable.setBalDirX(oldDirX);
-        movable.setBalDirY(oldDirY);
-        if(scored)
-        {
-          movable.setScoreLeft(scoreL);
-          movable.setScoreRight(scoreR);
-          scored = false;
-        }
-      }
-    });
-  }
 }

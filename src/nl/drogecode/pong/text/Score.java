@@ -22,7 +22,7 @@ public class Score extends TextCenter
     setY(50);
   }
 
-  public void restart()
+  public synchronized void restart()
   {
     scoreRight = 0;
     scoreLeft = 0;
@@ -30,7 +30,7 @@ public class Score extends TextCenter
     setCenter();
   }
 
-  public boolean setScoreRightPlus()
+  public synchronized boolean setScoreRightPlus()
   {
     scoreRight++;
     if (doWeHaveAWinner(scoreRight))
@@ -41,7 +41,7 @@ public class Score extends TextCenter
     return true;
   }
 
-  public boolean setScoreLeftPlus()
+  public synchronized boolean setScoreLeftPlus()
   {
     scoreLeft++;
     if (doWeHaveAWinner(scoreLeft))
@@ -52,13 +52,13 @@ public class Score extends TextCenter
     return true;
   }
   
-  public void setScoreRight(int right)
+  public synchronized void setScoreRight(int right)
   {
     scoreRight = right;
     updateScore();
   }
   
-  public void setScoreLeft(int left)
+  public synchronized void setScoreLeft(int left)
   {
     scoreLeft = left;
     updateScore();
@@ -72,12 +72,6 @@ public class Score extends TextCenter
   public int getScoreLeft()
   {
     return scoreLeft;
-  }
-
-  public void setFullText(String text)
-  {
-    setText(text);
-    setCenter();
   }
 
   private void updateScore()

@@ -29,6 +29,7 @@ public class WakeUp
     {
       timer.schedule(new runningThreadWaker(thread), 1000);
       thread.interrupt();
+      System.out.println("wake UP!");
     }
     
   }

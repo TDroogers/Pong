@@ -46,10 +46,13 @@ public class WebServer
   
   private void startNewThread(ServerSocket serverSocket) throws IOException
   {
-    Thread thread = new WebServerThread(serverSocket.accept(), movable);
-    thread.start();
+    Socket socket = serverSocket.accept();
+    Thread producer = new ProducerS(socket, movable);
+    Thread consumer = new ConsumerS(socket, movable);
+    producer.start();
+    consumer.start();
     
     WakeUp wake = new WakeUp();
-    wake.setNewThread(thread);
+    wake.setNewThread(producer);
   }
 }

@@ -10,7 +10,7 @@ import java.util.Calendar;
 import javafx.application.Platform;
 import nl.drogecode.pong.objects.MovableObjects;
 
-public class WebServerThread extends Thread
+public class ProducerS extends Thread
 {
   private Socket socket = null;
   private MovableObjects movable;
@@ -21,7 +21,7 @@ public class WebServerThread extends Thread
   private double oldClientY, oldSerY, oldBalX, oldBalY, oldDirX, oldDirY;
   private double curSerY, curBalX, curBalY, curDirX, curDirY;
 
-  public WebServerThread(Socket socket, MovableObjects movable)
+  public ProducerS(Socket socket, MovableObjects movable)
   {
     super("KKMultiServerThread " + socket.getLocalPort());
     this.socket = socket;

@@ -142,7 +142,7 @@ public class Bal extends Bal_setUp
       dirY *= -1;
       newY = y;
     }
-    else if (clear <= 0)
+    else if (clear <= 0 && client == false)
     {
       if (!getPointCheck())
       {
