@@ -1,6 +1,10 @@
 package nl.drogecode.pong;
 
 import javafx.scene.input.KeyCode;
+import nl.drogecode.pong.objects.Bal;
+import nl.drogecode.pong.objects.Beam;
+import nl.drogecode.pong.text.Message;
+import nl.drogecode.pong.text.Score;
 
 public class Controll
 {

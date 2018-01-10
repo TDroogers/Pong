@@ -1,4 +1,4 @@
-package nl.drogecode.pong;
+package nl.drogecode.pong.text;
 
 import javafx.stage.Stage;
 

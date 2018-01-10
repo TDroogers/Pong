@@ -9,7 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import javafx.application.Platform;
-import nl.drogecode.pong.MovableObjects;
+import nl.drogecode.pong.objects.MovableObjects;
 
 import java.io.*;
 

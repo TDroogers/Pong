@@ -1,8 +1,10 @@
-package nl.drogecode.pong;
+package nl.drogecode.pong.objects;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.stage.Stage;
+import nl.drogecode.pong.*;
+import nl.drogecode.pong.text.Score;
 
 public class Bal extends Bal_setUp
 {

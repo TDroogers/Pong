@@ -1,8 +1,10 @@
-package nl.drogecode.pong;
+package nl.drogecode.pong.objects;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import nl.drogecode.pong.*;
+import nl.drogecode.pong.text.Score;
 
 public class Bal_setUp extends Circle
 {

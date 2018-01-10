@@ -1,9 +1,10 @@
-package nl.drogecode.pong;
+package nl.drogecode.pong.objects;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import nl.drogecode.pong.*;
 
 public class Beam extends Rectangle
 {

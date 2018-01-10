@@ -1,9 +1,10 @@
 /*
  * Shows and updates the score on top of the screen.
  */
-package nl.drogecode.pong;
+package nl.drogecode.pong.text;
 
 import javafx.stage.Stage;
+import nl.drogecode.pong.Settings;
 
 public class Score extends TextCenter
 {

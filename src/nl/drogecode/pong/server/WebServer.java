@@ -8,7 +8,7 @@ package nl.drogecode.pong.server;
 
 import java.net.*;
 
-import nl.drogecode.pong.MovableObjects;
+import nl.drogecode.pong.objects.MovableObjects;
 
 import java.io.*;
 

@@ -1,5 +1,7 @@
 package nl.drogecode.pong;
 
+import nl.drogecode.pong.text.Message;
+
 public class Pause
 {
   private Message message;

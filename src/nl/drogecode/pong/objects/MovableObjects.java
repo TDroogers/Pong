@@ -1,4 +1,8 @@
-package nl.drogecode.pong;
+package nl.drogecode.pong.objects;
+
+import nl.drogecode.pong.Controll;
+import nl.drogecode.pong.text.Message;
+import nl.drogecode.pong.text.Score;
 
 public class MovableObjects
 {
