@@ -29,7 +29,7 @@ public class ConsumerS extends Thread
       for(;;)
       {
         inputLine = in.readLine();
-        readByte(inputLine);
+        readString(inputLine);
       }
       
     }
@@ -52,13 +52,15 @@ public class ConsumerS extends Thread
   }
   
   
-  private void readByte(String inputLine)
+  private void readString(String inputLine)
   {
     try
     {
-      double result = Double.parseDouble(inputLine);
+      String[] ary = inputLine.split("/");
+      double result = Double.parseDouble(ary[0]);
+      int beamYChange = Integer.parseInt(ary[1]);
       result += oldClientY;
-      updateBeamClientY(result);
+      updateScreen(result, beamYChange);
       oldClientY = result;
     }
     catch (Exception e)
@@ -67,13 +69,13 @@ public class ConsumerS extends Thread
     }
   }
   
-  private void updateBeamClientY(double newY)
+  private void updateScreen(double newY, int beamYChange)
   {
     Platform.runLater(new Runnable()
     {
       @Override public void run()
       {
-        movable.setBeamRightY(newY);
+        movable.setBeamRightY(newY, beamYChange);
       }
     });
   }

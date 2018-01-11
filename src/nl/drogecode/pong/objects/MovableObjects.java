@@ -31,9 +31,19 @@ public class MovableObjects
     return rRight.getX();
   }
 
+  public int getChangeR()
+  {
+    return (int) rRight.getChange();
+  }
+
   public double getBeamRightY()
   {
     return rRight.getY();
+  }
+
+  public int getChangeL()
+  {
+    return (int) rLeft.getChange();
   }
 
   public double getBeamLeftX()
@@ -70,12 +80,12 @@ public class MovableObjects
   {
     return score.getText();
   }
-  
+
   public int getScoreRight()
   {
     return score.getScoreRight();
   }
-  
+
   public int getScoreLeft()
   {
     return score.getScoreLeft();
@@ -89,25 +99,35 @@ public class MovableObjects
   {
     contr.setPlayer(side);
     message.setDifferentMessage(side);
-    
-    if (side.equals("client"))
+
+    switch (side)
     {
-      bal.setClient(true);
-      bal.nextGame();
-    }
-    else
-    {
-      bal.setClient(false);
+      case "client":
+        bal.setClient(true);
+        bal.nextGame();
+        rLeft.startY(0);
+        break;
+        
+      case "server":
+        rRight.startY(0);
+        //fall in default!!!
+        
+      default:
+        bal.setClient(false);
+        break;
     }
   }
 
-  public void setBeamRightY(double newY)
+  public void setBeamRightY(double newY, int beamYChange)
   {
     rRight.setY(newY);
+    rRight.setChange(beamYChange);
   }
-  public void setBeamLeftY(double newY)
+
+  public void setBeamLeftY(double newY, int beamYChange)
   {
     rLeft.setY(newY);
+    rLeft.setChange(beamYChange);
   }
 
   public void setBalX(double newX)
@@ -129,18 +149,18 @@ public class MovableObjects
   {
     bal.setDirY(dir);
   }
-  
+
   public void setScoreRestart()
   {
     this.score.restart();
   }
-  
+
   public void setScoreRight(int right)
   {
     System.out.println("right: " + right);
     this.score.setScoreRight(right);
   }
-  
+
   public void setScoreLeft(int left)
   {
     System.out.println("left: " + left);

@@ -75,6 +75,7 @@ public class ProducerS extends Thread
     StringBuilder ret = new StringBuilder("");
 
     ret.append(String.valueOf(oldSerY)).append("/");
+    ret.append(String.valueOf((byte) (movable.getChangeL()))).append("/");
     ret.append(String.valueOf(oldBalX)).append("/");
     ret.append(String.valueOf(oldBalY)).append("/");
     ret.append(String.valueOf(oldDirX)).append("/");
@@ -98,6 +99,7 @@ public class ProducerS extends Thread
     curScoreR = (byte) movable.getScoreRight();
 
     ret.append(String.valueOf((byte) (curSerY - oldSerY))).append("/");
+    ret.append(String.valueOf((byte) (movable.getChangeL()))).append("/");
     ret.append(String.valueOf((curBalX - oldBalX))).append("/");
     ret.append(String.valueOf((curBalY - oldBalY))).append("/");
     ret.append(String.valueOf((curDirX - oldDirX))).append("/");

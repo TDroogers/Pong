@@ -47,9 +47,11 @@ public class Beam extends Rectangle
       case "Right":
         setRight();
         break;
+
       case "Left":
         setLeft();
         break;
+
       default:
         break;
     }
@@ -76,6 +78,16 @@ public class Beam extends Rectangle
   public int getDistanceFromBorder()
   {
     return fromBoarder;
+  }
+
+  protected void setChange(double change)
+  {
+    this.change = change;
+  }
+
+  protected double getChange()
+  {
+    return change;
   }
 
   /*

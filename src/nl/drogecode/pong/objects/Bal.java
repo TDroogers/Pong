@@ -18,7 +18,6 @@ public class Bal extends Bal_setUp
   private volatile double y;
   private volatile boolean firstSpeedUp = true;
   private volatile boolean restart = false;
-  private volatile boolean breaker = false;
   private volatile boolean client = false;
 
   public Bal(Settings settings, Stage stage, Beam left, Beam right, Score score, Pause pause)
@@ -32,7 +31,7 @@ public class Bal extends Bal_setUp
     centerBall();
     if (th != null)
     {
-      breaker = true;
+      th.interrupt();
     }
     startMove();
   }
@@ -134,9 +133,8 @@ public class Bal extends Bal_setUp
     }
     updateBal();
 
-    if (!sleep.sleeper((int) speedUp) || breaker)
+    if (!sleep.sleeper((int) speedUp))
     {
-      breaker = false;
       return false;
     }
 

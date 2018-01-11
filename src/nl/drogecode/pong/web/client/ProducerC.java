@@ -14,7 +14,7 @@ public class ProducerC extends Thread
   MovableObjects movable;
 
   private double previus, currentY;
-  private byte ret;
+  private String ret;
 
   public ProducerC(Socket socket, MovableObjects movable)
   {
@@ -48,10 +48,11 @@ public class ProducerC extends Thread
     }
   }
 
-  private byte toServerByte()
+  private String toServerByte()
   {
     currentY = movable.getBeamRightY();
-    ret = (byte) (currentY - previus);
+    ret = String.valueOf(currentY - previus);
+    ret = ret.concat("/").concat(String.valueOf(movable.getChangeR()));
     previus = currentY;
     return ret;
   }

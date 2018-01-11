@@ -15,7 +15,7 @@ public class ConsumerC extends Thread
   MovableObjects movable;
 
   private double oldSerY, oldBalX, oldBalY, oldDirX, oldDirY, curSerY, curBalX, curBalY, curDirX, curDirY;
-  private int scoreL, scoreR;
+  private int scoreL, scoreR, beamYChange;
   private boolean scored;
 
   public ConsumerC(Socket socket, MovableObjects movable)
@@ -62,16 +62,17 @@ public class ConsumerC extends Thread
     try
     {
       oldSerY = Double.parseDouble(ary[1]);
-      oldBalX = Double.parseDouble(ary[2]);
-      oldBalY = Double.parseDouble(ary[3]);
-      oldDirX = Double.parseDouble(ary[4]);
-      oldDirY = Double.parseDouble(ary[5]);
-      scoreL = Integer.parseInt(ary[6]);
-      scoreR = Integer.parseInt(ary[7]);
+      beamYChange = Integer.parseInt(ary[2]);
+      oldBalX = Double.parseDouble(ary[3]);
+      oldBalY = Double.parseDouble(ary[4]);
+      oldDirX = Double.parseDouble(ary[5]);
+      oldDirY = Double.parseDouble(ary[6]);
+      scoreL = Integer.parseInt(ary[7]);
+      scoreR = Integer.parseInt(ary[8]);
     }
     catch (Exception e)
     {
-      System.out.println("error woeps: " + e);
+      System.out.println("error ConsumerC readFullString: " + fromServer + " : " + e);
     }
     scored = true;
     updateScreen();
@@ -83,21 +84,22 @@ public class ConsumerC extends Thread
     try
     {
       curSerY = Double.parseDouble(ary[0]);
-      curBalX = Double.parseDouble(ary[1]);
-      curBalY = Double.parseDouble(ary[2]);
-      curDirX = Double.parseDouble(ary[3]);
-      curDirY = Double.parseDouble(ary[4]);
+      beamYChange = Integer.parseInt(ary[1]);
+      curBalX = Double.parseDouble(ary[2]);
+      curBalY = Double.parseDouble(ary[3]);
+      curDirX = Double.parseDouble(ary[4]);
+      curDirY = Double.parseDouble(ary[5]);
 
-      if (ary.length > 5)
+      if (ary.length > 6)
       {
-        scoreL = Integer.parseInt(ary[5]);
-        scoreR = Integer.parseInt(ary[6]);
+        scoreL = Integer.parseInt(ary[6]);
+        scoreR = Integer.parseInt(ary[7]);
         scored = true;
       }
     }
     catch (Exception e)
     {
-      System.out.println("error woeps: " + e);
+      System.out.println("error ConsumerC readString: " + fromServer + " : " + e);
     }
 
     oldSerY += curSerY;
@@ -115,7 +117,7 @@ public class ConsumerC extends Thread
     {
       @Override public void run()
       {
-        movable.setBeamLeftY(oldSerY);
+        movable.setBeamLeftY(oldSerY, beamYChange);
         movable.setBalX(oldBalX);
         movable.setBalY(oldBalY);
         movable.setBalDirX(oldDirX);
